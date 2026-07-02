@@ -47,9 +47,7 @@ export default function Highlights() {
       {highlights.length > 0 ? (
         highlights.map((h) => (
           <div key={h.tweetId} className="overflow-hidden rounded-xl shadow-lg">
-            <Tweet 
-                id={h.tweetId} options={{ theme: 'dark', conversation: 'none' } as any} 
-/>
+            <Tweet id={h.tweetId} />
           </div>
         ))
       ) : (
