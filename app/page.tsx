@@ -8,7 +8,7 @@ export default function HomePage() {
     <main className="min-h-screen bg-slate-900 text-slate-100 p-6 md:p-12 flex flex-col items-center">
       <div className="max-w-xl w-full text-center mb-8">
         <h1 className="text-3xl font-black tracking-tight uppercase flex items-center justify-center gap-2">
-          <Sparkles className="w-6 h-6 text-indigo-400" /> Keeper Cost Calculator
+          <Sparkles className="w-6 h-6 text-indigo-400" /> Regionaliga Südkiff Hub
         </h1>
         <p className="text-slate-400 text-xs mt-1 uppercase tracking-wider">
           Saison 2026 • Live-Berechnung & Liga-Verwaltung

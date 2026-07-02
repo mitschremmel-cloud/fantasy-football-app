@@ -23,7 +23,6 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
     const resAllPlayers = await fetch('https://api.sleeper.app/v1/players/nfl', { cache: 'no-store' });
     const allPlayersMap = await resAllPlayers.json();
 
-    // Stabile Helper-Funktion für Draft-Picks
     const fetchDraft = async (id: string) => {
       try {
         const res = await fetch(`https://api.sleeper.app/v1/draft/${id}/picks`);
@@ -61,8 +60,14 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
         (roster.players || []).forEach((pId: string) => {
           const pInfo = allPlayersMap ? allPlayersMap[pId] : null;
           if (pInfo) {
+            // Mapping für den vollen Namen
             const sNorm = normalisiereName(`${pInfo.first_name || ""} ${pInfo.last_name || ""}`);
             if (sNorm) spielerZuManagerMap[sNorm] = managerName;
+            
+            // AUTOMATISCHE ERWEITERUNG: Nachname als separater Match-Key
+            if (pInfo.last_name && pInfo.last_name.length > 3) {
+              spielerZuManagerMap[normalisiereName(pInfo.last_name)] = managerName;
+            }
           }
         });
       });

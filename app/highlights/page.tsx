@@ -36,13 +36,16 @@ export default function Highlights() {
     return <div className="p-4 text-center text-slate-500 text-sm">Keine aktuellen Highlights gefunden.</div>;
   }
 
-  return (
-    <div className="flex flex-col gap-6 items-center">
-      {highlights.map((h) => (
-        <div key={h.tweetId} className="w-full max-w-md">
-          <Tweet id={h.tweetId} />
-        </div>
-      ))}
-    </div>
-  );
+ 
+    // data-theme="dark" sorgt dafür, dass die react-tweet Komponente den Dark Mode nutzt
+// Ergänze das umschließende div um eine Hintergrundfarbe, z.B. bg-slate-900
+return (
+  <div className="flex flex-col gap-6 items-center bg-slate-900 min-h-screen p-6" data-theme="dark">
+    {highlights.map((h) => (
+      <div key={h.tweetId} className="w-full max-w-md">
+        <Tweet id={h.tweetId} />
+      </div>
+    ))}
+  </div>
+);
 }
