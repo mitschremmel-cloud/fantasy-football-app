@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { History, Sparkles, Star } from 'lucide-react';
+import { History, Sparkles, Star, ScrollText, Scale } from 'lucide-react'; // 'Scale' hinzugefügt
 import KeeperCalculator from './components/KeeperCalculator';
 import ManagerKader from './components/ManagerKader';
 
@@ -15,31 +15,36 @@ export default function HomePage() {
         </p>
       </div>
 
-      {/* NAVIGATION ZUR HISTORIE UND HIGHLIGHTS */}
-      <div className="max-w-xl w-full mb-6 flex gap-3">
+      {/* NAVIGATION */}
+      <div className="max-w-xl w-full mb-6 grid grid-cols-2 gap-3"> {/* Grid für bessere Anordnung */}
         <Link 
           href="/historie"
-          className="flex-1 bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-indigo-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-indigo-400 transition-all flex items-center justify-center gap-2 group font-medium shadow-lg shadow-slate-950/20"
+          className="bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-indigo-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-indigo-400 transition-all flex items-center justify-center gap-2 group font-medium"
         >
-          <History className="w-4 h-4 text-slate-400 group-hover:text-indigo-400 transition-colors" />
-          Historie
+          <History className="w-4 h-4" /> Draft-Historie
         </Link>
         
         <Link 
-          href="/highlights"
-          className="flex-1 bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-emerald-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-emerald-400 transition-all flex items-center justify-center gap-2 group font-medium shadow-lg shadow-slate-950/20"
+          href="/spielplan"
+          className="bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-amber-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-amber-400 transition-all flex items-center justify-center gap-2 group font-medium"
         >
-          <Star className="w-4 h-4 text-slate-400 group-hover:text-emerald-400 transition-colors" />
-          Highlights
+          <ScrollText className="w-4 h-4" /> Spielplan
+        </Link>
+
+        {/* NEUER TRADE ANALYZER LINK */}
+        <Link 
+          href="/trade-analyzer"
+          className="col-span-2 bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-blue-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-blue-400 transition-all flex items-center justify-center gap-2 group font-medium shadow-lg shadow-slate-950/20"
+        >
+          <Scale className="w-4 h-4 text-slate-400 group-hover:text-blue-400 transition-colors" />
+          Trade Analyzer
         </Link>
       </div>
 
-      {/* Dein bestehender Rechner */}
       <div className="max-w-xl w-full">
         <KeeperCalculator />
       </div>
 
-      {/* Deine bestehende Live-Kader Liste */}
       <div className="max-w-xl w-full mt-6">
         <ManagerKader />
       </div>

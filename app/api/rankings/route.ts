@@ -9,11 +9,16 @@ const bereinigeName = (name: string) => {
     .trim();
 };
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(request: Request): Promise<NextResponse> {
   try {
-    const url = "https://www.fantasypros.com/nfl/rankings/half-point-ppr-cheatsheets.php";
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get('type');
     
-    // Wir erhöhen die Timeout-Toleranz und simulieren einen echten Browser noch stärker
+    // URL Weiche: Standard oder RoS
+    const url = type === 'ros' 
+      ? "https://www.fantasypros.com/nfl/rankings/ros-half-point-ppr-cheatsheets.php"
+      : "https://www.fantasypros.com/nfl/rankings/half-point-ppr-cheatsheets.php";
+    
     const res = await fetch(url, {
       next: { revalidate: 3600 },
       headers: { 
@@ -30,18 +35,18 @@ export async function GET(): Promise<NextResponse> {
 
     const html = await res.text();
     
-    // DEBUG: Wir prüfen, ob wir den "players" String überhaupt finden
+    // Debugging beibehalten
     const containsPlayers = html.includes('players":');
     console.log(`DEBUG: HTML geladen, Länge: ${html.length}. Enthält 'players":' -> ${containsPlayers}`);
 
     if (!containsPlayers) {
-      // Wenn das fehlt, wurde die Seite umgebaut
       console.error("KRITISCH: Struktur bei FantasyPros geändert. 'players' nicht gefunden.");
       return NextResponse.json({ error: "Datenstruktur nicht gefunden" });
     }
 
     let gelisteteSpieler: any[] = [];
     
+    // Die originale, exakte Regex Logik
     const ecrDataRegex = /players":\s*(\[[\s\S]*?\])/i;
     const match = ecrDataRegex.exec(html);
 
@@ -49,10 +54,11 @@ export async function GET(): Promise<NextResponse> {
       try {
         const players = JSON.parse(match[1].trim());
         if (Array.isArray(players)) {
-          gelisteteSpieler = players.map((p: any) => ({
-            rank: parseInt(p.rank_ecr || p.rank_overall || p.rank || 0, 10),
-            name: bereinigeName(p.player_name || "")
-          }));
+        gelisteteSpieler = players.map((p: any) => ({
+        rank: parseInt(p.rank_ecr || p.rank_overall || p.rank || 0, 10),
+        name: p.player_name || "Unknown",           // Originaler Name (schön)
+        searchName: bereinigeName(p.player_name || "") // Bereinigter Name (klein/ohne Leerzeichen)
+}));
         }
       } catch (e) {
         console.error("JSON Parsing Fehler:", e);

@@ -1,5 +1,3 @@
-// app/utils/sleeperRoute.ts
-
 const LEAGUE_ID = "1251196293691211776";
 
 const DRAFT_IDS: Record<string, string> = {
@@ -12,6 +10,7 @@ const DRAFT_IDS: Record<string, string> = {
 export interface SpielerDaten {
   name: string;
   manager: string;
+  division: number; 
   runde2025: string;
   istWaiver: boolean;
   jahreGekeept: number;
@@ -25,7 +24,7 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
 
     const fetchDraft = async (id: string) => {
       try {
-        const res = await fetch(`https://api.sleeper.app/v1/draft/${id}/picks`);
+        const res = await fetch(`https://api.sleeper.app/v1/draft/${id}/picks`, { next: { revalidate: 900 } });
         return res.ok ? await res.json() : [];
       } catch { return []; }
     };
@@ -38,6 +37,7 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
     ]);
 
     const drafts: Record<string, any[]> = { "2022": d22, "2023": d23, "2024": d24, "2025": d25 };
+    const allDraftPicks = Object.values(drafts).flat();
 
     const [resUsers, resRosters] = await Promise.all([
       fetch(`https://api.sleeper.app/v1/league/${LEAGUE_ID}/users`, { next: { revalidate: 900 } }),
@@ -51,54 +51,63 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
 
     const normalisiereName = (n: string) => n ? n.toLowerCase().replace(/[^a-z0-9]/g, "").trim() : "";
 
-    const spielerZuManagerMap: Record<string, string> = {};
+    const alleSpielerFormatiert: Record<string, { name: string, manager: string, division: number, picks: Record<string, any> }> = {};
+
     if (Array.isArray(rosters)) {
       rosters.forEach((roster: any) => {
         const managerUser = Array.isArray(users) ? users.find((u: any) => u.user_id === roster.owner_id) : null;
         const managerName = managerUser ? (managerUser.metadata?.team_name || managerUser.display_name) : "Unbekannter Manager";
+        const division = roster.settings?.division || 1;
         
         (roster.players || []).forEach((pId: string) => {
+          const pickInDraft = allDraftPicks.find(d => d.player_id === pId);
           const pInfo = allPlayersMap ? allPlayersMap[pId] : null;
-          if (pInfo) {
-            // Mapping für den vollen Namen
-            const sNorm = normalisiereName(`${pInfo.first_name || ""} ${pInfo.last_name || ""}`);
-            if (sNorm) spielerZuManagerMap[sNorm] = managerName;
-            
-            // AUTOMATISCHE ERWEITERUNG: Nachname als separater Match-Key
-            if (pInfo.last_name && pInfo.last_name.length > 3) {
-              spielerZuManagerMap[normalisiereName(pInfo.last_name)] = managerName;
-            }
-          }
-        });
-      });
-    }
+          
+          let vollerName = pickInDraft 
+            ? `${pickInDraft.metadata?.first_name || ""} ${pickInDraft.metadata?.last_name || ""}`.trim()
+            : (pInfo ? `${pInfo.first_name || ""} ${pInfo.last_name || ""}`.trim() : "");
 
-    const alleGedraftetenSpielerFormatiert: Record<string, { name: string, picks: Record<string, any> }> = {};
-
-    Object.keys(drafts).forEach(jahr => {
-      if (Array.isArray(drafts[jahr])) {
-        drafts[jahr].forEach(pick => {
-          let vollerName = pick.metadata?.first_name ? `${pick.metadata.first_name} ${pick.metadata.last_name}`.trim() : "";
-          if (!vollerName && allPlayersMap?.[pick.player_id]) {
-            const pInfo = allPlayersMap[pick.player_id];
-            vollerName = `${pInfo.first_name || ""} ${pInfo.last_name || ""}`.trim();
-          }
+          if (!vollerName) vollerName = `Spieler (${pId})`;
 
           const sNorm = normalisiereName(vollerName);
           if (!sNorm) return;
 
-          if (!alleGedraftetenSpielerFormatiert[sNorm]) {
-            alleGedraftetenSpielerFormatiert[sNorm] = { name: vollerName, picks: { "2022": null, "2023": null, "2024": null, "2025": null } };
-          }
-          alleGedraftetenSpielerFormatiert[sNorm].picks[jahr] = pick;
+          alleSpielerFormatiert[sNorm] = {
+            name: vollerName,
+            manager: managerName,
+            division: division,
+            picks: { "2022": null, "2023": null, "2024": null, "2025": null }
+          };
         });
+      });
+    }
+
+    allDraftPicks.forEach(pick => {
+      let vollerName = pick.metadata?.first_name ? `${pick.metadata.first_name} ${pick.metadata.last_name}`.trim() : "";
+      if (!vollerName && allPlayersMap?.[pick.player_id]) {
+        vollerName = `${allPlayersMap[pick.player_id].first_name} ${allPlayersMap[pick.player_id].last_name}`.trim();
+      }
+
+      const sNorm = normalisiereName(vollerName);
+      if (!sNorm) return;
+
+      if (!alleSpielerFormatiert[sNorm]) {
+        alleSpielerFormatiert[sNorm] = {
+          name: vollerName,
+          manager: "Free Agent / Karriereende",
+          division: 1,
+          picks: { "2022": null, "2023": null, "2024": null, "2025": null }
+        };
+      }
+
+      const jahr = Object.keys(DRAFT_IDS).find(j => DRAFT_IDS[j] === pick.draft_id);
+      if (jahr) {
+        alleSpielerFormatiert[sNorm].picks[jahr] = pick;
       }
     });
 
-    return Object.values(alleGedraftetenSpielerFormatiert).map(spieler => {
-      const sNorm = normalisiereName(spieler.name);
+    return Object.values(alleSpielerFormatiert).map(spieler => {
       const picks = spieler.picks;
-      
       const r = (j: string) => picks[j] ? Number(picks[j].round) : 16;
       const isK = (j: string) => picks[j] ? (!!picks[j].is_keeper || !!picks[j].metadata?.is_keeper) : false;
 
@@ -113,7 +122,8 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
 
       return {
         name: spieler.name,
-        manager: spielerZuManagerMap[sNorm] || "Free Agent / Karriereende",
+        manager: spieler.manager,
+        division: spieler.division,
         runde2025: String(r("2025")),
         istWaiver: !picks["2025"],
         jahreGekeept,
@@ -130,5 +140,54 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
   } catch (error) {
     console.error("Fehler in holeSleeperLigaKader:", error);
     return { error: "Fehler beim Generieren der Daten aus der Sleeper API" };
+  }
+}
+
+// ----------------------------------------------------------------------
+// NEUE FUNKTION: Sauber GETRENNT von der Funktion oben!
+// ----------------------------------------------------------------------
+export async function holeSleeperMatchups() {
+  try {
+    const [resUsers, resRosters] = await Promise.all([
+      fetch(`https://api.sleeper.app/v1/league/${LEAGUE_ID}/users`, { next: { revalidate: 900 } }),
+      fetch(`https://api.sleeper.app/v1/league/${LEAGUE_ID}/rosters`, { next: { revalidate: 900 } })
+    ]);
+
+    if (!resUsers.ok || !resRosters.ok) throw new Error("Sleeper API nicht erreichbar");
+
+    const users = await resUsers.json();
+    const rosters = await resRosters.json();
+
+    const rosterIdToTeamName: Record<number, string> = {};
+    rosters.forEach((roster: any) => {
+      const managerUser = users.find((u: any) => u.user_id === roster.owner_id);
+      const managerName = managerUser ? (managerUser.metadata?.team_name || managerUser.display_name) : "Unbekannter Manager";
+      rosterIdToTeamName[roster.roster_id] = managerName;
+    });
+
+    const scheduleMap: Record<number, { team1: string, team2: string }[]> = {};
+    const promises = Array.from({ length: 14 }, (_, i) => i + 1).map(async (week) => {
+      const matchRes = await fetch(`https://api.sleeper.app/v1/league/${LEAGUE_ID}/matchups/${week}`, { next: { revalidate: 3600 } });
+      if (!matchRes.ok) return;
+      const matchData = await matchRes.json();
+
+      const groupedMatches: Record<number, number[]> = {};
+      matchData.forEach((m: any) => {
+        if (!groupedMatches[m.matchup_id]) groupedMatches[m.matchup_id] = [];
+        groupedMatches[m.matchup_id].push(m.roster_id);
+      });
+
+      scheduleMap[week] = Object.values(groupedMatches).map(ids => ({
+        team1: rosterIdToTeamName[ids[0]] || `Team ${ids[0]}`,
+        team2: rosterIdToTeamName[ids[1]] || `Team ${ids[1]}`
+      }));
+    });
+
+    await Promise.all(promises);
+    return scheduleMap;
+
+  } catch (error) {
+    console.error("Fehler in holeSleeperMatchups:", error);
+    return { error: "Fehler beim Laden des Spielplans" };
   }
 }
