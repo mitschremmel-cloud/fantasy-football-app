@@ -66,15 +66,30 @@ export default function TradeAnalyzerPage() {
       <h1 className="text-3xl font-bold mb-8 text-center">Trade Analyzer</h1>
 
       {/* Trade Container */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-        {[ { title: "Spieler 1 bekommt", items: sideA, side: 'A' }, { title: "Spieler 2 bekommt", items: sideB, side: 'B' } ].map(s => (
-          <div key={s.side} className="bg-slate-800/40 p-6 rounded-2xl border border-slate-700">
-            <h2 className="text-lg font-bold mb-4 text-indigo-400">{s.title}</h2>
-            <div className="min-h-[150px]">
-              {s.items.map(i => <div key={i.id} className="flex justify-between py-1 border-b border-slate-700/50"><span>{i.name}</span><span className="font-bold">{i.value}</span></div>)}
+     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+  {[ { title: "Spieler 1 bekommt", items: sideA, side: 'A' }, { title: "Spieler 2 bekommt", items: sideB, side: 'B' } ].map(s => (
+    <div key={s.side} className="bg-slate-800/40 p-6 rounded-2xl border border-slate-700 flex flex-col min-h-[300px]">
+      <h2 className="text-lg font-bold mb-4 text-indigo-400">{s.title}</h2>
+      
+      {/* Dieser Container wächst nun und nimmt den verfügbaren Platz ein */}
+      <div className="flex-grow">
+        {s.items.length === 0 ? (
+          <div className="text-slate-600 italic text-sm text-center mt-10">Keine Spieler/Picks</div>
+        ) : (
+          s.items.map(i => (
+            <div key={i.id} className="flex justify-between py-1 border-b border-slate-700/50">
+              <span>{i.name}</span>
+              <span className="font-bold">{i.value}</span>
             </div>
-            <div className="text-xl font-black mt-4 text-center">Summe: {calcSum(s.items)}</div>
-          </div>
+          ))
+        )}
+      </div>
+
+      {/* Die Summe bleibt jetzt immer am unteren Rand der Karte */}
+      <div className="text-xl font-black mt-6 text-center border-t border-slate-700 pt-4">
+        Summe: {calcSum(s.items)}
+      </div>
+    </div>
         ))}
       </div>
       
