@@ -9,13 +9,16 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@vercel/kv": "^3.0.0",
     "fast-xml-parser": "^5.9.3",
     "lucide-react": "^1.23.0",
     "next": "16.2.9",
     "papaparse": "^5.5.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-tweet": "^3.3.1"
+    "react-tweet": "^3.3.1",
+    "recharts": "^3.9.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -26,5 +29,10 @@
     "eslint-config-next": "16.2.9",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "@google/generative-ai@0.24.1": true,
+    "sharp@0.34.5": true,
+    "unrs-resolver@1.12.2": true
   }
 }
