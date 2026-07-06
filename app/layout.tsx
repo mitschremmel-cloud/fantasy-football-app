@@ -11,6 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <a href="/" className="p-2">Dashboard</a>
           <a href="/spielplan" className="p-2">Spielplan</a>
           <a href="/historie" className="p-2">Draft-Historie</a>
+          <a href="/regelbacklog" className="p-2">Regel-Backlog</a>
           <a href="/tools/keeper" className="p-2">Keeper</a>
         </nav>
 
