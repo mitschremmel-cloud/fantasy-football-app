@@ -8,7 +8,7 @@ const regelVorschlaege = [
     description: 'Vergleich Standard vs. benutzerdefiniertes Scoring für Quarterbacks.' 
   },
   { 
-    id: 'kicker-penalty', 
+    id: 'kicker',
     title: 'Kicker Skill & Penalty Anpassung', 
     description: 'Visualisierung der Auswirkungen auf 0-19 Yard Misses.' 
   },

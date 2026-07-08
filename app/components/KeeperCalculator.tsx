@@ -33,21 +33,24 @@ export default function KeeperCalculator() {
   const [ausgewaehlterSpieler, setAusgewaehlterSpieler] = useState<Spieler | null>(null);
   const [berechnungsErgebnis, setBerechnungsErgebnis] = useState<Ergebnis | null>(null);
   const [zeigeVorschlaege, setZeigeVorschlaege] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function ladeZentralDaten() {
       try {
         // Sicherer Fetch für Rankings
         const resFp = await fetch('/api/rankings');
-        const contentType = resFp.headers.get("content-type");
-        const fpData = (contentType && contentType.includes("application/json")) ? await resFp.json() : [];
+        if (!resFp.ok) throw new Error("Fehler beim Laden der Rankings.");
+
+        const fpData = await resFp.json();
+        if (fpData.error) throw new Error(fpData.error);
         setFpRankings(Array.isArray(fpData) ? fpData : []);
 
         // Sicherer Fetch für Sleeper
         const resSleeper = await fetch('/api/sleeper');
-        const sleeperContentType = resSleeper.headers.get("content-type");
-        const ligaKader = (sleeperContentType && sleeperContentType.includes("application/json")) ? await resSleeper.json() : [];
-        
+        if (!resSleeper.ok) throw new Error("Fehler beim Laden der Liga-Daten.");
+
+        const ligaKader = await resSleeper.json();
         if (Array.isArray(ligaKader)) {
           const formatierteListe = ligaKader.map((spieler: any) => ({
             name: spieler.name,
@@ -57,6 +60,7 @@ export default function KeeperCalculator() {
         }
       } catch (err) {
         console.error("Fehler beim Laden der Rechner-Daten:", err);
+        setError(err instanceof Error ? err.message : "Ein unbekannter Fehler ist aufgetreten.");
       } finally {
         setLoading(false);
       }
@@ -87,6 +91,22 @@ export default function KeeperCalculator() {
       </div>
     );
   }
+
+  if (error) {
+    return (
+      <div className="bg-rose-900/20 border border-rose-500/50 rounded-2xl p-6 shadow-2xl text-center text-xs text-rose-300">
+        <AlertTriangle className="w-8 h-8 mx-auto mb-2 text-rose-400" />
+        <p className="font-bold">Daten konnten nicht geladen werden</p>
+        <p className="mt-1 opacity-80">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-4 text-xs bg-rose-500/20 hover:bg-rose-500/30 px-3 py-1 rounded-full transition-colors"
+        >
+          Neu laden
+              </button>
+          </div>
+  );
+}
 
   return (
     <div className="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-2xl relative">

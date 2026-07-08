@@ -33,7 +33,7 @@ export default function HomePage() {
 
         {/* NEU: Regel-Backlog Link */}
         <Link 
-          href="/regelbacklog/quarterback" 
+          href="/regelbacklog"
           className="bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-emerald-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-emerald-400 transition-all flex items-center justify-center gap-2 group font-medium"
         >
           <BookOpen className="w-4 h-4" /> Regel-Backlog
@@ -59,3 +59,5 @@ export default function HomePage() {
     </main>
   );
 }
+
+

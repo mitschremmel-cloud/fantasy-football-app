@@ -5,17 +5,28 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 export default function ScoringSimulator() {
   const [year, setYear] = useState(2025);
   // WICHTIG: comp und incmp hier ergänzen!
-  const [weights, setWeights] = useState({
+  const [weights, setWeights] = useState<Record<string, number | string>>({
     passTd: 4, passYd: 0.04, int: 2, rushYd: 0.1, rushTd: 6, fumble: 1, fumbleLost: 1, comp: 0, incmp: 0
   });
   const [results, setResults] = useState<any[]>([]);
   const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' }>({ key: 'simulated', direction: 'desc' });
 
+  const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
+    const val = e.target.value;
+    setWeights(prev => ({ ...prev, [key]: val === '' ? '' : parseFloat(val) }));
+  };
+
   const fetchData = async () => {
+    // Sicherstellen, dass alle Gewichte Zahlen sind (leere Strings -> 0)
+    const sanitizedWeights: Record<string, number> = {};
+    Object.entries(weights).forEach(([key, val]) => {
+      const numVal = Number(val);
+      sanitizedWeights[key] = (val === '' || val === null || val === undefined || isNaN(numVal)) ? 0 : numVal;
+    });
     const res = await fetch('/api/nflverse/quarterback', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' }, // WICHTIG: Header für JSON hinzufügen
-      body: JSON.stringify({ year, weights }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ year, weights: sanitizedWeights }),
     });
     const data = await res.json();
     setResults(data);
@@ -30,14 +41,10 @@ export default function ScoringSimulator() {
   });
 
   const requestSort = (key: string) => {
-    setSortConfig(prev => ({ 
-      key, 
-      direction: prev.key === key && prev.direction === 'desc' ? 'asc' : 'desc' 
+    setSortConfig(prev => ({
+      key,
+      direction: prev.key === key && prev.direction === 'desc' ? 'asc' : 'desc'
     }));
-  };
-
-  const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
-    setWeights(prev => ({ ...prev, [key]: parseFloat(e.target.value) || 0 }));
   };
 
   return (
@@ -45,8 +52,8 @@ export default function ScoringSimulator() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <div>
           <label className="block text-xs text-slate-400 mb-1">Saison</label>
-          <select 
-            value={year} 
+          <select
+            value={year}
             onChange={(e) => setYear(Number(e.target.value))}
             className="w-full bg-slate-700 p-2 rounded border border-slate-600"
           >
@@ -56,10 +63,11 @@ export default function ScoringSimulator() {
         {Object.entries(weights).map(([key, val]) => (
           <div key={key}>
             <label className="block text-xs text-slate-400 mb-1 capitalize">{key}</label>
-            <input 
-              type="number" 
-              step="0.01"
-              value={val}
+            <input
+              type="number"
+              step="any"
+              value={val === 0 ? '' : val}
+              placeholder="0"
               onChange={(e) => handleWeightChange(e, key)}
               className="w-full bg-slate-700 p-2 rounded border border-slate-600"
             />
@@ -67,8 +75,9 @@ export default function ScoringSimulator() {
         ))}
       </div>
 
-      <table className="w-full text-left text-sm">
-        <thead>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-sm whitespace-nowrap">
+          <thead>
           <tr className="text-slate-400 border-b border-slate-700 cursor-pointer">
             <th className="p-2" onClick={() => requestSort('name')}>Spieler</th>
             <th className="p-2" onClick={() => requestSort('passYd')}>Pass Yd</th>
@@ -99,44 +108,45 @@ export default function ScoringSimulator() {
           ))}
         </tbody>
       </table>
+</div>
       <div className="h-80 w-full mt-10 bg-slate-900 p-4 rounded">
   <h3 className="text-white mb-4">Punkte pro Spiel Vergleich (Top 32)</h3>
   <ResponsiveContainer width="100%" height="100%">
     <LineChart data={sortedData.map((p, i) => ({ rank: i + 1, standard: p.standard, simulated: p.simulated }))}>
       <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
-      <XAxis 
-        dataKey="rank" 
-        stroke="#94a3b8" 
-        label={{ value: 'Rank', position: 'insideBottom', offset: -5, fill: '#94a3b8' }} 
+      <XAxis
+        dataKey="rank"
+        stroke="#94a3b8"
+        label={{ value: 'Rank', position: 'insideBottom', offset: -5, fill: '#94a3b8' }}
       />
-      <YAxis 
-        stroke="#94a3b8" 
+      <YAxis
+        stroke="#94a3b8"
         domain={[10, 'auto']} // Startet bei 10, geht automatisch bis zum Maximum
-        label={{ value: 'Pts/G', angle: -90, position: 'insideLeft', fill: '#94a3b8' }} 
+        label={{ value: 'Pts/G', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
       />
-      <Tooltip 
-        contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '4px' }} 
+      <Tooltip
+        contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '4px' }}
         itemStyle={{ color: '#e2e8f0' }}
       />
       <Legend />
-      <Line 
-        type="monotone" 
-        dataKey="standard" 
-        stroke="#94a3b8" 
-        name="Standard" 
-        dot={{ r: 3 }} 
+      <Line
+        type="monotone"
+        dataKey="standard"
+        stroke="#94a3b8"
+        name="Standard"
+        dot={{ r: 3 }}
       />
-      <Line 
-        type="monotone" 
-        dataKey="simulated" 
-        stroke="#6366f1" 
-        name="Simuliert" 
-        strokeWidth={2} 
-        dot={{ r: 4 }} 
+      <Line
+        type="monotone"
+        dataKey="simulated"
+        stroke="#6366f1"
+        name="Simuliert"
+        strokeWidth={2}
+        dot={{ r: 4 }}
       />
     </LineChart>
   </ResponsiveContainer>
-</div>
+    </div>
     </div>
   );
 }

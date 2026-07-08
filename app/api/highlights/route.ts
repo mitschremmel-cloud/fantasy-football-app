@@ -13,6 +13,10 @@ const TWITTER_FEEDS = [
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export async function GET(): Promise<NextResponse> {
+  // --- DEAKTIVIERT ---
+  return NextResponse.json({ message: "Highlights-Workflow ist vorübergehend deaktiviert.", highlights: [] });
+  // -------------------
+
   const TEST_MODE = false; 
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
   

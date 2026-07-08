@@ -27,5 +27,6 @@ const url = `https://github.com/nflverse/nflverse-data/releases/download/stats_p
 // Hilfsfunktion zum Filtern
 function processData(text: string) {
   const data = csvParse(text);
-  return data.filter(row => row.position === 'QB');
+  // Wir geben nun alle Daten zurück, da wir später nach Position filtern können
+  return data;
 }

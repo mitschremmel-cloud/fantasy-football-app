@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-// Raus aus quarterback, nflverse, api, app, dann rein in utils
-import { calculateSimulation } from '../../../utils/nflverse/qb/scoringsystem';
+// Jetzt im gleichen Verzeichnis wie kickerLogic: utils/nflverse/qbScoring.ts
+import { calculateSimulation } from '../../../utils/nflverse/qbScoring';
 
 export async function POST(req: Request) {
   try {
