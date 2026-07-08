@@ -1,5 +1,5 @@
 // utils/nflverse/qb/scoringsystem.ts
-import { getQbStatsByYear } from './baseStats';
+import { getStatsByPosition } from './baseStats';
 
 export interface ScoringWeights {
   passTd: number;
@@ -14,7 +14,7 @@ export interface ScoringWeights {
 }
 
 export async function calculateSimulation(year: number, weights: ScoringWeights) {
-  const data = await getQbStatsByYear(year);
+  const data = await getStatsByPosition(year, 'QB');
   
   const playerMap = new Map<string, any>();
 
@@ -88,6 +88,6 @@ export async function calculateSimulation(year: number, weights: ScoringWeights)
         simulated: getPoints(weights) / games,
       };
     })
-    .sort((a, b) => b.simulated - a.simulated)
+    .sort((a, b) => b.standard - a.standard) // Sortiere nach Standard-Punkten
     .slice(0, 32);
 }

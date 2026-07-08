@@ -1,32 +1,39 @@
 import { csvParse } from 'd3-dsv';
 
-export async function getQbStatsByYear(year: number) {
-const url = `https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_reg_${year}.csv`  
-  console.log(`Versuche Daten von URL zu laden: ${url}`);
+// app/utils/nflverse/baseStats.ts
+
+// Nutze die Next.js-eigene fetch-Option, die den Daten-Cache nutzt
+export async function getStatsByPosition(year: number, position: string) {
+  // Diese Zeile wird ab jetzt nie wieder angefasst.
+  const url = `https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_${year}.csv`;
+
 
   try {
-    const res = await fetch(url, { cache: 'no-store' });
-    
-    if (!res.ok) {
-      console.warn(`Fehler ${res.status} bei ${url}.`);
-      return [];
-    }
+
+
+
+    // next: { revalidate: 3600 } speichert das Ergebnis für 1 Stunde im Next.js Cache
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) return [];
 
     const text = await res.text();
-    
-    // Falls die Antwort HTML ist, abbrechen
     if (text.trim().startsWith('<')) return [];
 
-    return processData(text);
+    const data = csvParse(text);
+
+
+    return data.filter(row => {
+      const pos = (row.position as string || '').trim().toUpperCase();
+      return pos === position.toUpperCase();
+    });
+
   } catch (error) {
     console.error("Datenabruf fehlgeschlagen:", error);
     return [];
   }
 }
 
-// Hilfsfunktion zum Filtern
-function processData(text: string) {
-  const data = csvParse(text);
-  // Wir geben nun alle Daten zurück, da wir später nach Position filtern können
-  return data;
+export async function getQbStatsByYear(year: number) {
+  return getStatsByPosition(year, 'QB');
 }
+

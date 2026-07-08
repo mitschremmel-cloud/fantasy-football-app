@@ -4,6 +4,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { KickerPerformanceMetrics } from '@/app/utils/nflverse/statsAnalysisKicker';
 import { KickerAnalysisCharts } from './KickerAnalysisCharts';
 
+const statsCache = new Map<string, any>();
+
 export default function KickerScoringSimulator() {
   const [year, setYear] = useState(2025);
   const [weights, setWeights] = useState<Record<string, number | string>>({
@@ -40,13 +42,14 @@ export default function KickerScoringSimulator() {
     const data = await res.json();
     setResults(data);
 
-    try {
-      const { getKickerPerformanceAnalysis } = await import('@/app/utils/nflverse/statsAnalysisKicker');
-      const analysis = await getKickerPerformanceAnalysis(year, sanitizedWeights as any);
-      setStats(analysis);
-    } catch (e) {
-      console.error("Fehler beim Laden der Analyse-Daten", e);
-    }
+    // Übergib hier die Ergebnisse der Simulation direkt an den Chart
+    setStats(data.map((p: any) => ({
+      name: p.name,
+      avgStandard: p.standardPointsPerGame,
+      avgSimulated: p.pointsPerGame,
+      cvStandard: p.cvStandard,
+      cvSimulated: p.cvSimulated
+    })));
   };
 
   useEffect(() => { fetchData(); }, [year, weights]);
