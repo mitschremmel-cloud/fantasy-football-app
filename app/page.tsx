@@ -1,7 +1,5 @@
 import Link from 'next/link';
-import { History, Sparkles, ScrollText, Scale, BookOpen } from 'lucide-react'; // BookOpen hinzugefügt
-import KeeperCalculator from './components/KeeperCalculator';
-import ManagerKader from './components/ManagerKader';
+import { History, Sparkles, ScrollText, Scale, BookOpen, Activity, Trophy, Newspaper } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -17,47 +15,41 @@ export default function HomePage() {
 
       {/* NAVIGATION */}
       <div className="max-w-xl w-full mb-6 grid grid-cols-2 gap-3">
+
+        {/* Ligabetrieb Link */}
         <Link 
-          href="/historie"
-          className="bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-indigo-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-indigo-400 transition-all flex items-center justify-center gap-2 group font-medium"
-        >
-          <History className="w-4 h-4" /> Draft-Historie
-        </Link>
-        
-        <Link 
-          href="/spielplan"
+          href="/ligabetrieb"
           className="bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-amber-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-amber-400 transition-all flex items-center justify-center gap-2 group font-medium"
         >
-          <ScrollText className="w-4 h-4" /> Spielplan
+          <Trophy className="w-4 h-4" /> Ligabetrieb
         </Link>
-
-        {/* NEU: Regel-Backlog Link */}
+        
+        {/* Neuigkeiten Link */}
         <Link 
-          href="/regelbacklog"
-          className="bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-emerald-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-emerald-400 transition-all flex items-center justify-center gap-2 group font-medium"
+          href="/neuigkeiten"
+          className="bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-pink-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-pink-400 transition-all flex items-center justify-center gap-2 group font-medium"
         >
-          <BookOpen className="w-4 h-4" /> Regel-Backlog
+          <Newspaper className="w-4 h-4" /> Neuigkeiten
         </Link>
 
-        {/* Trade Analyzer Link */}
+        {/* Rechner Hub Link */}
         <Link 
-          href="/trade-analyzer"
-          className="col-span-2 bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-blue-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-blue-400 transition-all flex items-center justify-center gap-2 group font-medium shadow-lg shadow-slate-950/20"
+          href="/rechner"
+          className="bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-blue-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-blue-400 transition-all flex items-center justify-center gap-2 group font-medium"
         >
-          <Scale className="w-4 h-4 text-slate-400 group-hover:text-blue-400 transition-colors" />
-          Trade Analyzer
+          <Scale className="w-4 h-4" /> Rechner Hub
         </Link>
-      </div>
 
-      <div className="max-w-xl w-full">
-        <KeeperCalculator />
-      </div>
+        {/* Simulatoren Hub Link */}
+        <Link 
+          href="/simulatoren"
+          className="bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 hover:border-indigo-500/50 rounded-xl py-3 px-4 text-sm text-slate-300 hover:text-indigo-400 transition-all flex items-center justify-center gap-2 group font-medium"
+        >
+          <Activity className="w-4 h-4" /> Simulatoren Hub
+        </Link>
 
-      <div className="max-w-xl w-full mt-6">
-        <ManagerKader />
       </div>
     </main>
   );
 }
-
 

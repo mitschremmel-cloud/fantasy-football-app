@@ -16,6 +16,9 @@ export async function calculateKickerSimulation(year: number, weights: KickerSco
   const playerMap = new Map<string, any>();
 
   data.forEach(row => {
+    const week = Number(row.week || 0);
+    if (week > 18) return; // Begrenzung auf die ersten 18 Wochen
+
     const id = row.player_id;
     if (!playerMap.has(id)) {
       playerMap.set(id, { 

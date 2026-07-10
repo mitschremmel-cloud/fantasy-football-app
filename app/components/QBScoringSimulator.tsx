@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-export default function ScoringSimulator() {
+export default function QBScoringSimulator() {
   const [year, setYear] = useState(2025);
   // WICHTIG: comp und incmp hier ergänzen!
   const [weights, setWeights] = useState<Record<string, number | string>>({
@@ -121,14 +121,14 @@ export default function ScoringSimulator() {
       />
       <YAxis
         stroke="#94a3b8"
-        domain={[10, 'auto']} // Startet bei 10, geht automatisch bis zum Maximum
-        label={{ value: 'Pts/G', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
+        domain={[10, 'auto']}
+        label={{ value: 'Pts/G', angle: -90, position: 'insideLeft', offset: 10, fill: '#94a3b8' }}
       />
       <Tooltip
         contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '4px' }}
         itemStyle={{ color: '#e2e8f0' }}
       />
-      <Legend />
+      <Legend verticalAlign="top" align="right" wrapperStyle={{ top: 0, right: 0 }} />
       <Line
         type="monotone"
         dataKey="standard"

@@ -34,6 +34,11 @@ interface AnalysisChartsProps {
 }
 
 export function KickerAnalysisCharts({ data }: AnalysisChartsProps) {
+  // Sicherstellen, dass data existiert, bevor es verwendet wird
+  if (!data || !Array.isArray(data)) {
+    return <div className="p-4 text-slate-400">Keine Daten verfügbar.</div>;
+  }
+
   // Wir nutzen exakt die Daten, die wir bekommen, sortiert nach Leistung
   const sortedData = [...data]
     .sort((a, b) => (b.avgSimulated || 0) - (a.avgSimulated || 0));

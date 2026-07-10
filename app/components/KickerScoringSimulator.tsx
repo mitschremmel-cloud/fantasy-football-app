@@ -145,9 +145,9 @@ export default function KickerScoringSimulator() {
           }))}>
             <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
             <XAxis dataKey="rank" stroke="#94a3b8" />
-            <YAxis stroke="#94a3b8" domain={[0, 'auto']} />
+            <YAxis stroke="#94a3b8" domain={['auto', 'auto']} />
             <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none' }} />
-            <Legend wrapperStyle={{ fontSize: '12px' }} />
+            <Legend verticalAlign="top" align="right" wrapperStyle={{ top: 0, right: 0 }} />
             <Line type="monotone" dataKey="standard" stroke="#94a3b8" name="Standard" strokeWidth={2} dot={false} />
             <Line type="monotone" dataKey="simulated" stroke="#6366f1" name="Simuliert" strokeWidth={2} dot={false} />
           </LineChart>

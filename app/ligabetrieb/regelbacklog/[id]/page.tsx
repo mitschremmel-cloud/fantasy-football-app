@@ -1,6 +1,6 @@
 // app/regelbacklog/[id]/page.tsx
-import ScoringSimulator from '../../components/ScoringSimulator';
-import KickerScoringSimulator from '../../components/KickerScoringSimulator';
+import QBScoringSimulator from '../../../components/QBScoringSimulator';
+import KickerScoringSimulator from '../../../components/KickerScoringSimulator';
 
 export default async function RegelAnalysePage({ params }: { params: { id: string } }) {
   const { id } = await params;
@@ -11,7 +11,7 @@ export default async function RegelAnalysePage({ params }: { params: { id: strin
       
       {/* Wir rendern die entsprechende Komponente basierend auf der ID */}
       {id === 'quarterback' ? (
-        <ScoringSimulator />
+        <QBScoringSimulator />
       ) : id === 'kicker' ? (
         <KickerScoringSimulator />
       ) : (
