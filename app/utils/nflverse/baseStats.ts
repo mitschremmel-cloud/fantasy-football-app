@@ -37,3 +37,4 @@ export async function getQbStatsByYear(year: number) {
   return getStatsByPosition(year, 'QB');
 }
 
+

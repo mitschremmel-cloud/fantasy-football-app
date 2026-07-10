@@ -38,3 +38,4 @@ export default function RechnerDetail() {
 
   return <div className="p-6 text-white">Rechner nicht gefunden.</div>;
 }
+
