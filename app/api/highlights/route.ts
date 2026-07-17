@@ -61,7 +61,8 @@ export async function GET(): Promise<NextResponse> {
       content: `${i.title || ""} ${i.description || ""}` 
     })).filter(i => i.tweetId && i.tweetId.length > 5);
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash", generationConfig: { responseMimeType: "application/json" } });
+    // KORREKTUR: Modellname auf gemini-1.5-flash geändert
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", generationConfig: { responseMimeType: "application/json" } });
     
     const prompt = `
  Analysiere diese Tweets auf Fantasy-Highlights für den Kader: ${JSON.stringify(aktiveKader.map((s: { name: string; manager: string }) => ({ name: s.name, manager: s.manager })))}. 

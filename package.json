@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@marsidev/react-turnstile": "^1.5.3",
+    "@uploadthing/react": "^7.3.3",
     "@vercel/kv": "^3.0.0",
     "d3-dsv": "^3.0.1",
     "fast-xml-parser": "^5.9.3",
@@ -18,11 +20,14 @@
     "papaparse": "^5.5.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-markdown": "^10.1.0",
     "react-tweet": "^3.3.1",
-    "recharts": "^3.9.2"
+    "recharts": "^3.9.2",
+    "uploadthing": "^7.7.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.20",
     "@types/d3-dsv": "^3.0.7",
     "@types/node": "^20",
     "@types/react": "^19",
