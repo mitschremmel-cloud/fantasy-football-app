@@ -114,12 +114,13 @@ export default function ArtikelVerfassenPage() {
         </div>
         {imageUrls.length > 0 && <p className="text-green-500 text-sm">Bilder erfolgreich hochgeladen!</p>}
 
-        {process.env.NODE_ENV === 'production' && (
+        {/* Captcha-Block */}
+        <div className="flex justify-center my-4">
         <Turnstile
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
           onSuccess={(token) => setToken(token)}
         />
-        )}
+        </div>
         <button
           type="submit"
           disabled={isGenerating}
