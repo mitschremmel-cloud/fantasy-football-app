@@ -115,9 +115,9 @@ export default function ArtikelVerfassenPage() {
         {imageUrls.length > 0 && <p className="text-green-500 text-sm">Bilder erfolgreich hochgeladen!</p>}
 
         {/* Captcha-Block */}
-        <div className="flex justify-center my-4">
+        <div className="my-4">
         <Turnstile
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "DEIN_FALLBACK_KEY_ZUM_TESTEN"}
           onSuccess={(token) => setToken(token)}
         />
         </div>
