@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { kv } from '@vercel/kv';
 
+export const revalidate = 0; // <--- HIER EINFÜGEN
+
 // Wir definieren einen Typ für die Artikel
 type Article = {
   id: string;
@@ -14,6 +16,8 @@ type Article = {
 export default async function NeuigkeitenFeed() {
   // Artikel aus der Vercel KV Datenbank abrufen
   const rawArticles = await kv.lrange<any>('articles', 0, -1);
+
+  console.log("RAW ARTICLES FROM KV:", rawArticles); // DEBUG-LOG
 
   // Sicherer Parse: Überspringe kaputte Einträge statt die ganze App zu crashen
   const articles: Article[] = rawArticles.map((a) => {
@@ -30,6 +34,9 @@ export default async function NeuigkeitenFeed() {
       }
   }).filter((a): a is Article => a !== null); // Entfernt alle null-Werte
 
+  // HIER DIE SORTIERUNG HINZUFÜGEN:
+  const sortedArticles = articles.sort((a, b) => b.createdAt - a.createdAt);
+
   return (
     <main className="p-8 text-white max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-8">
@@ -43,10 +50,10 @@ export default async function NeuigkeitenFeed() {
       </div>
       
       <div className="grid gap-6">
-        {articles.length === 0 ? (
+        {sortedArticles.length === 0 ? (
           <p className="text-gray-400">Noch keine Artikel vorhanden.</p>
         ) : (
-          articles.map((article) => {
+          sortedArticles.map((article) => {
             // Zusammenfassung: Erste 3 Sätze aus dem Content ziehen
             const summary = article.content.split('.').slice(0, 3).join('.') + '.';
 
