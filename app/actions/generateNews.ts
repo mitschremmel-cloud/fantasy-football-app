@@ -40,9 +40,11 @@ export async function generateNewsArticle(rawContent: string, token: string, mod
       Regeln:
       1. Ändere NICHT ein einziges Wort am Inhalt. Übernimm den Text exakt so wie er ist.
       2. Aufgabe: Formatierung als ${mode === 'article' ? 'Zeitungsartikel' : 'Interview-Transkript'}.
-      3. Füge GENAU ${imageCount} Bild-Platzhalter ein: ![Bild](URL_HIER_EINSETZEN).
+      3. WICHTIG: Füge GENAU ${imageCount} Bild-Platzhalter ein.
+         Nutze für das 1. Bild: ![Bild](IMAGE_1), für das 2. Bild: ![Bild](IMAGE_2), usw. bis ![Bild](IMAGE_${imageCount}).
+         Platziere diese Marker an den passenden Stellen im Text.
       4. KEINE HAUPTÜBERSCHRIFT: Schreibe BITTE KEINE Hauptüberschrift (kein # Zeichen) ganz oben in den Text, da die App eine eigene Headline verwendet.
-      5. Zwischenüberschriften: Du darfst und sollst gerne ## für Zwischenüberschriften im Text verwenden, solange es nicht die erste Zeile des Textes betrifft.
+      5. Zwischenüberschriften: Nutze ## für Zwischenüberschriften an logischen Stellen.
       6. Modus ${mode === 'interview'}:
          - Formatiere als exklusives Interview mit **Sprecher:** (fett).
          - WICHTIG: Füge nach JEDER Sprecher-Antwort einen doppelten Zeilenumbruch ein.

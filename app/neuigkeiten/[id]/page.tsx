@@ -27,13 +27,12 @@ export default async function ArtikelDetail({ params }: { params: Promise<{ id: 
 
   if (!article) return <main className="p-8 text-white">Artikel nicht gefunden.</main>;
 
-  // Wir ersetzen Platzhalter-URLs nacheinander durch die echten URLs
-  let imageIndex = 0;
-  const contentWithImages = article.content.replace(/URL_HIER_EINSETZEN/g, () => {
-    const url = article.imageUrls?.[imageIndex] || "";
-    imageIndex++;
-    return url;
+  // Wir ersetzen Platzhalter-URLs (IMAGE_1, IMAGE_2, ...) durch die echten URLs
+  const contentWithImages = article.content.replace(/IMAGE_(\d+)/g, (match, p1) => {
+    const index = parseInt(p1) - 1;
+    return article.imageUrls?.[index] || "";
   });
+
   return (
     <main className="p-8 text-white max-w-3xl mx-auto zeitungs-artikel">
       <Link href="/neuigkeiten" className="text-blue-400 hover:underline mb-8 block">← Zurück zur Übersicht</Link>
