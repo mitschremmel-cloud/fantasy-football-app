@@ -1,6 +1,7 @@
 import { kv } from '@vercel/kv';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
+import type { Metadata } from 'next';
 
 type Article = {
   id: string;
@@ -10,6 +11,20 @@ type Article = {
   imageUrl?: string;
   createdAt: number;
 };
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const rawArticles = await kv.lrange<any>('articles', 0, -1);
+  const article = rawArticles.map(a => typeof a === 'string' ? JSON.parse(a) : a).find((a: Article) => a.id === id);
+
+  return {
+    title: article?.title || "Artikel",
+    openGraph: {
+      title: article?.title || "Artikel",
+      images: article?.imageUrls?.[0] ? [article.imageUrls[0]] : [],
+    },
+  };
+}
 
 export default async function ArtikelDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

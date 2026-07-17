@@ -1,6 +1,16 @@
 import Link from 'next/link';
 import { kv } from '@vercel/kv';
 import { History, Sparkles, ScrollText, Scale, BookOpen, Activity, Trophy, Newspaper } from 'lucide-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Regionaliga Südkiff Hub",
+  description: "Saison 2026 • Live-Berechnung & Liga-Verwaltung",
+  openGraph: {
+    title: "Regionaliga Südkiff Hub",
+    description: "Saison 2026 • Live-Berechnung & Liga-Verwaltung",
+  },
+};
 
 export const revalidate = 0;
 
