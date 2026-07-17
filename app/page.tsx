@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { kv } from '@vercel/kv';
 import { History, Sparkles, ScrollText, Scale, BookOpen, Activity, Trophy, Newspaper } from 'lucide-react';
 
+export const revalidate = 0;
+
 type Article = {
   id: string;
   title: string;
