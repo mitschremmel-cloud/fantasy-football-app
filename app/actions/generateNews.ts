@@ -34,8 +34,7 @@ export async function generateNewsArticle(
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Wir nehmen die ID exakt so, wie sie auf deinem Playground-Screenshot steht.
-    // Das bricht den 404-Kreislauf der veralteten 2.5-Bezeichnungen auf.
+    // Ändere hier das Modell auf die Version, auf die du Zugriff hast
     const model = genAI.getGenerativeModel({
       model: "gemini-3-flash-preview"
     });
@@ -51,7 +50,7 @@ export async function generateNewsArticle(
          Nutze für das 1. Bild: ![Bild](IMAGE_1), für das 2. Bild: ![Bild](IMAGE_2), usw. bis ![Bild](IMAGE_${imageCount}).
          Platziere diese Marker an den passenden Stellen im Text.
       4. KEINE HAUPTÜBERSCHRIFT: Schreibe BITTE KEINE Hauptüberschrift (kein # Zeichen) ganz oben in den Text, da die App eine eigene Headline verwendet.
-      5. Datum (17. Mai 2024) und Ort (${location}) ganz oben.
+      5. Datum (${new Date().toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' })}) und Ort (${location}) ganz oben.
       6. Zwischenüberschriften: Nutze ## für Zwischenüberschriften an logischen Stellen.
       7. Modus ${mode === 'interview'}:
          - Formatiere als exklusives Interview mit **Sprecher:** (fett).
