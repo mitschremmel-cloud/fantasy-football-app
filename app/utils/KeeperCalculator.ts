@@ -24,15 +24,23 @@ export interface KeeperErgebnis {
 function normalisiereName(name: string): string {
   return name
     .toLowerCase()
-    .replace(/\s+(iii|ii|jr|sr|iv|v)$/, "") // Entfernt bekannte Suffixe am Ende
-    .replace(/[^a-z0-9]/g, "");             // Entfernt alle Sonderzeichen und Leerzeichen
+    .replace(/(jr\.?|iii|ii|sr|iv|v|i)$/g, "") // Entfernt Suffixe am Ende
+    .replace(/\s+/g, "")                       // Entfernt alle Leerzeichen
+    .replace(/[^a-z0-9]/g, "");                // Entfernt alle Sonderzeichen
 }
 
 export function berechneKeeperKosten(
-  spielerName: string, 
-  playerFromDb: PlayerFromDb | null, 
+  spielerName: string,
+  playerFromDb: PlayerFromDb | null,
   fpRankings: FpRanking[]
 ): KeeperErgebnis {
+
+  // DIAGNOSE: Logge das Matching
+  console.log(`Suche Spieler: "${spielerName}" (norm: "${normalisiereName(spielerName)}")`);
+  fpRankings.slice(0, 10).forEach(p =>
+    console.log(`Vergleich mit: "${p.name}" (norm: "${normalisiereName(p.name)}")`)
+  );
+
   let jahreGekeeptHistorisch = 0;
   let ursprungsRunde = 16;
   let istWaiver = true;
@@ -63,10 +71,10 @@ export function berechneKeeperKosten(
   const keeperJahrFuerBerechnung = jahreGekeeptHistorisch + 1;
 
   // Verwendung der Normalisierung für den Vergleich
-  const fpSpieler = fpRankings.find(p => 
+  const fpSpieler = fpRankings.find(p =>
     normalisiereName(p.name) === normalisiereName(spielerName)
   );
-  
+
   if (!fpSpieler) {
     return {
       erlaubt: false,
@@ -83,16 +91,6 @@ export function berechneKeeperKosten(
     2: { 3: -2, 4: -2, 5: -1, 6: -1, 7: 0, 8: 0, 9: 1, 10: 1, 11: 2, 12: 2, 13: 3, 14: 3, 15: 3, 16: 2 },
     3: { 3: -5, 4: -5, 5: -4, 6: -4, 7: -3, 8: -3, 9: -2, 10: -2, 11: -1, 12: -1, 13: 0, 14: 0, 15: 0, 16: -1 }
   };
-
-// Hilfsfunktion zum Bereinigen von Namen (entfernt Suffixe wie III, Jr, Sr etc. für den Vergleich)
-function normalisiereName(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/\s+(iii|ii|jr|sr|iv|v|i)$/g, "") // Entfernt bekannte Suffixe am Ende
-    .replace(/\.+/g, "")                      // Entfernt Punkte (z.B. Jr.)
-    .replace(/\s+/g, "")                      // Entfernt alle Leerzeichen
-    .replace(/[^a-z0-9]/g, "");               // Entfernt alle Sonderzeichen
-}
 
   let jahrKey = keeperJahrFuerBerechnung > 3 ? 3 : keeperJahrFuerBerechnung;
 
@@ -136,3 +134,4 @@ function normalisiereName(name: string): string {
     rundenBonus
   };
 }
+
