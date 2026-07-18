@@ -50,7 +50,7 @@ export async function generateNewsArticle(
          Nutze für das 1. Bild: ![Bild](IMAGE_1), für das 2. Bild: ![Bild](IMAGE_2), usw. bis ![Bild](IMAGE_${imageCount}).
          Platziere diese Marker an den passenden Stellen im Text.
       4. KEINE HAUPTÜBERSCHRIFT: Schreibe BITTE KEINE Hauptüberschrift (kein # Zeichen) ganz oben in den Text, da die App eine eigene Headline verwendet.
-      5. Datum (${new Date().toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' })}) und Ort (${location}) ganz oben.
+      5. Datum (${new Date().toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' })}), Ort (${location}) und Zeitung (${newspaper}) ganz oben.
       6. Zwischenüberschriften: Nutze ## für Zwischenüberschriften an logischen Stellen.
       7. Modus ${mode === 'interview'}:
          - Formatiere als exklusives Interview mit **Sprecher:** (fett).
