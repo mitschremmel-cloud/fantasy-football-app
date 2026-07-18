@@ -88,7 +88,7 @@ export default async function ArtikelDetail({ params }: { params: Promise<{ id: 
           day: '2-digit',
           month: 'long',
           year: 'numeric'
-        })}, Kiffruhe
+        })},
       </div>
 
       {/* Die Überschrift besonders groß */}
