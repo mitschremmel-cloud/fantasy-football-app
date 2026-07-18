@@ -37,7 +37,7 @@ export async function generateNewsArticle(
     // Wir nehmen die ID exakt so, wie sie auf deinem Playground-Screenshot steht.
     // Das bricht den 404-Kreislauf der veralteten 2.5-Bezeichnungen auf.
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash"
+      model: "gemini-2.5-flash"
     });
 
     const prompt = `
