@@ -17,15 +17,23 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const rawArticles = await kv.lrange<any>('articles', 0, -1);
   const article = rawArticles.map(a => typeof a === 'string' ? JSON.parse(a) : a).find((a: Article) => a.id === id);
 
+  const url = `https://fantasy-football-app-sigma.vercel.app/neuigkeiten/${id}`;
+
   return {
     title: article?.title || "Artikel",
+    description: article?.content.substring(0, 100) + "...", // Beschreibung für og:description
     openGraph: {
       title: article?.title || "Artikel",
+      description: article?.content.substring(0, 100) + "...",
+      url: url,
+      siteName: "Regionaliga Südkiff Hub",
       images: article?.imageUrls?.[0] ? [{ url: article.imageUrls[0], width: 1200, height: 630, alt: article.title }] : [],
+      type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
       title: article?.title || "Artikel",
+      description: article?.content.substring(0, 100) + "...",
       images: article?.imageUrls?.[0] ? [article.imageUrls[0]] : [],
     },
   };
