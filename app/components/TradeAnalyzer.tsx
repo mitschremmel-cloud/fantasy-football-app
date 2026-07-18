@@ -12,7 +12,7 @@ export default function TradeAnalyzer() {
     const now = new Date();
     if (now < seasonStart) return 1;
     const diffDays = Math.floor((now.getTime() - seasonStart.getTime()) / (1000 * 60 * 60 * 24));
-    return Math.max(1, Math.min(16, Math.floor(diffDays / 7) + 1));
+    return Math.max(1, Math.min(17, Math.floor(diffDays / 7) + 1));
   };
   
   const [currentWeek] = useState(getCurrentMatchupWeek());  
@@ -60,10 +60,24 @@ export default function TradeAnalyzer() {
 
   return (
     <div className="max-w-4xl w-full p-6 text-slate-100">
+
+      {/* Erklärungsteil */}
+      <div className="bg-slate-800/40 p-6 rounded-2xl border border-slate-700 mb-8 text-sm text-slate-300">
+        <h2 className="text-lg font-bold text-indigo-400 mb-3">Wie funktioniert die Berechnung?</h2>
+        <ul className="list-disc pl-5 space-y-2">
+          <li>
+            <strong>Draft Pick Value:</strong> Die Bewertung wird beruhend auf der <a href="https://www.draftsharks.com/trade-value-chart/dynasty-startup" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">Draft Sharks Dynasty Startup Chart</a>  sowie der Methodik des <a href="https://dynastyleaguefootball.com/trade-analyzer/?teams=10&teamA=2029.1" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">DLF Trade Analyzer</a> berechnet. Zukünftige Picks verlieren pro Jahr ca. 30 % ihres Wertes. Je nach Quelle werden hier 20-45% Wertverlust pro Jahr angenommen. Als weitere Orientierung kann bspw. der <a href="https://dynastyleaguefootball.com/trade-analyzer/?teams=10&teamA=2029.1" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">DLF Trade Analyzer</a> genutzt werden. 
+          </li>
+          <li>
+            <strong>Rest of Season (ROS) Value:</strong> Der Wert basiert auf den <a href="https://www.fantasypros.com/nfl/rankings/ros-half-point-ppr-overall.php" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">FantasyPros ROS-Rankings</a>. Der Wert eines Spielers nimmt pro Woche um ca. 5,88 % ab (basierend auf einem 17-Wochen-Saisonmodell), da die Anzahl der verbleibenden Punkte, die er dir liefern kann, kontinuierlich sinkt.
+          </li>
+        </ul>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {[ 
-          { title: "Spieler 1 bekommt", items: sideA, side: 'A' }, 
-          { title: "Spieler 2 bekommt", items: sideB, side: 'B' } 
+        {[
+          { title: "Spieler 1 bekommt", items: sideA, side: 'A' },
+          { title: "Spieler 2 bekommt", items: sideB, side: 'B' }
         ].map(s => (
           <div key={s.side} className="bg-slate-800/40 p-6 rounded-2xl border border-slate-700 flex flex-col h-[400px]">
             <h2 className="text-xl font-bold mb-6 text-indigo-400 text-center">{s.title}</h2>
@@ -91,7 +105,6 @@ export default function TradeAnalyzer() {
       <div className="text-center mb-8">
         <button onClick={resetTrade} className="text-slate-400 hover:text-red-400 text-sm underline">Trade zurücksetzen</button>
       </div>
-
       <div className="bg-slate-800/20 p-6 rounded-2xl border border-slate-700">
         <div className="flex gap-2 mb-6">
           <button onClick={() => setActiveTab('pick')} className={`px-4 py-2 rounded-xl flex-1 ${activeTab === 'pick' ? 'bg-indigo-600' : 'bg-slate-800'}`}>Pick (Runde) hinzufügen</button>
@@ -156,3 +169,4 @@ export default function TradeAnalyzer() {
     </div>
   );
 }
+

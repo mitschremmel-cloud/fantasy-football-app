@@ -21,6 +21,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     title: article?.title || "Artikel",
     openGraph: {
       title: article?.title || "Artikel",
+      images: article?.imageUrls?.[0] ? [{ url: article.imageUrls[0], width: 1200, height: 630, alt: article.title }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article?.title || "Artikel",
       images: article?.imageUrls?.[0] ? [article.imageUrls[0]] : [],
     },
   };
@@ -54,7 +59,11 @@ export default async function ArtikelDetail({ params }: { params: Promise<{ id: 
       
       {/* Manuelle Platzierung von Datum und Ort */}
       <div className="text-right text-sm text-gray-400 mb-2 italic">
-        17. Mai 2024, Kiffruhe
+        {new Date(article.createdAt).toLocaleDateString('de-DE', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        })}, Kiffruhe
       </div>
 
       {/* Die Überschrift besonders groß */}

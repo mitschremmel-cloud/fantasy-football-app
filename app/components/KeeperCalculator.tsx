@@ -110,6 +110,21 @@ export default function KeeperCalculator() {
 
   return (
     <div className="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-2xl relative">
+
+      {/* Erklärungsteil */}
+      <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 mb-6 text-sm text-slate-300">
+        <h3 className="text-indigo-400 font-bold mb-2 text-base">Wie funktionieren Keeper-Kosten?</h3>
+        <p className="mb-2">
+          Die Keeper-Kosten basieren auf der <strong>Legacy Draft Position</strong> (aus Sleeper), der Anzahl der Jahre, in denen ein Spieler bereits behalten wurde, und dem aktuellen <strong>FantasyPros ADP</strong> (Average Draft Position).
+        </p>
+        <p className="mb-2">
+          Wir verwenden die aktuellen FantasyPros-Rankings für die Berechnung: <a href="https://www.fantasypros.com/nfl/rankings/half-point-ppr-overall.php" target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">FantasyPros ADP (Half-PPR Overall)</a>.
+        </p>
+        <p>
+          <strong>Wichtig:</strong> Keeper müssen spätestens eine Woche vor unserem Draft eingeloggt werden!
+        </p>
+      </div>
+
       <div className="relative mb-6">
         <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
           Spieler-Name eingeben
@@ -179,3 +194,4 @@ export default function KeeperCalculator() {
     </div>
   );
 }
+
