@@ -95,6 +95,20 @@ export default async function ArtikelDetail({ params }: { params: Promise<{ id: 
         {article.title}
       </h1>
 
+      {/* Teilen-Button */}
+      <div className="flex justify-center mb-8">
+        <button
+          onClick={() => {
+            const freshUrl = `${window.location.origin}${window.location.pathname}?t=${Date.now()}`;
+            navigator.clipboard.writeText(freshUrl);
+            alert('Link wurde in die Zwischenablage kopiert! WhatsApp wird das Vorschaubild jetzt neu laden.');
+          }}
+          className="bg-slate-700 hover:bg-indigo-600 text-white px-6 py-2 rounded-full text-sm transition-all shadow-lg border border-slate-600"
+        >
+          🔗 Link zum Teilen kopieren
+        </button>
+      </div>
+
       <div className="prose prose-invert max-w-none">
         <ReactMarkdown
           components={{
