@@ -84,6 +84,16 @@ export function berechneKeeperKosten(
     3: { 3: -5, 4: -5, 5: -4, 6: -4, 7: -3, 8: -3, 9: -2, 10: -2, 11: -1, 12: -1, 13: 0, 14: 0, 15: 0, 16: -1 }
   };
 
+// Hilfsfunktion zum Bereinigen von Namen (entfernt Suffixe wie III, Jr, Sr etc. für den Vergleich)
+function normalisiereName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\s+(iii|ii|jr|sr|iv|v|i)$/g, "") // Entfernt bekannte Suffixe am Ende
+    .replace(/\.+/g, "")                      // Entfernt Punkte (z.B. Jr.)
+    .replace(/\s+/g, "")                      // Entfernt alle Leerzeichen
+    .replace(/[^a-z0-9]/g, "");               // Entfernt alle Sonderzeichen
+}
+
   let jahrKey = keeperJahrFuerBerechnung > 3 ? 3 : keeperJahrFuerBerechnung;
 
   if (bonusMatrix[jahrKey] && bonusMatrix[jahrKey][ursprungsRunde] !== undefined) {
