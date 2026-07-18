@@ -20,6 +20,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   const url = `https://fantasy-football-app-sigma.vercel.app/neuigkeiten/${id}`;
 
+  // WhatsApp/OpenGraph mag am liebsten 1200x630 (1.91:1)
+  // Wir geben das Bild an, aber lassen den Browser entscheiden,
+  // wie es skaliert wird. Das Bild im Artikel bleibt unberührt!
   return {
     title: article?.title || "Artikel",
     description: article?.content.substring(0, 100) + "...", // Beschreibung für og:description
@@ -29,9 +32,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       url: url,
       siteName: "Regionaliga Südkiff Hub",
       images: article?.imageUrls?.[0] ? [{
-        url: encodeURI(article.imageUrls[0]),
+        url: article.imageUrls[0],
         width: 1200,
-        height: 630,
+        height: 630, // Wir geben WhatsApp die Dimensionen vor!
         alt: article.title
       }] : [],
       type: 'article',
@@ -74,7 +77,7 @@ export default async function ArtikelDetail({ params }: { params: Promise<{ id: 
   const comments = rawComments.map(c => typeof c === 'string' ? JSON.parse(c) : c);
   return (
     <main className="p-8 text-white max-w-3xl mx-auto zeitungs-artikel">
-      <Link href="/neuigkeiten" className="text-blue-400 hover:underline mb-8 block">← Zurück zur Übersicht</Link>
+      <Link href={`/neuigkeiten?t=${Date.now()}`} className="text-blue-400 hover:underline mb-8 block">← Zurück zur Übersicht</Link>
       
       {/* Manuelle Platzierung von Datum und Ort */}
       <div className="text-right text-sm text-gray-400 mb-2 italic">
