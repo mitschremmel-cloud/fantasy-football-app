@@ -13,6 +13,8 @@ export default function ArtikelVerfassenPage() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [location, setLocation] = useState('');
+  const [newspaper, setNewspaper] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [token, setToken] = useState<string>();
   const [isGenerating, setIsGenerating] = useState(false);
@@ -24,8 +26,8 @@ export default function ArtikelVerfassenPage() {
     if (!token && !isDev) { alert('Bitte Captcha lösen.'); return; }
     setIsGenerating(true);
     try {
-      // Übergabe der Bildanzahl an die KI-Funktion
-      const generated = await generateNewsArticle(content, token || "dev-bypass", mode, imageUrls.length);
+      // Modus und Ort/Zeitung übergeben
+      const generated = await generateNewsArticle(content, token || "dev-bypass", mode, imageUrls.length, location, newspaper);
       await saveArticle({
         title: title,
         content: generated,
@@ -75,6 +77,25 @@ export default function ArtikelVerfassenPage() {
           required
         />
         
+        <div className="flex gap-4">
+          <input
+            type="text"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="w-full p-4 bg-gray-800 rounded-lg text-white border border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none"
+            placeholder="Ort..."
+            required
+          />
+          <input
+            type="text"
+            value={newspaper}
+            onChange={(e) => setNewspaper(e.target.value)}
+            className="w-full p-4 bg-gray-800 rounded-lg text-white border border-gray-600 focus:ring-2 focus:ring-blue-500 outline-none"
+            placeholder="Name der Zeitung..."
+            required
+          />
+        </div>
+
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
@@ -88,7 +109,6 @@ export default function ArtikelVerfassenPage() {
           <div className="bg-blue-600 text-white rounded-md px-4 py-2 cursor-pointer">
             Bilder hinzufügen
           </div>
-
           <UploadButton
             endpoint="imageUploader"
             content={{

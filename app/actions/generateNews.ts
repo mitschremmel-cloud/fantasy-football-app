@@ -2,7 +2,14 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export async function generateNewsArticle(rawContent: string, token: string, mode: 'article' | 'interview', imageCount: number) {
+export async function generateNewsArticle(
+  rawContent: string,
+  token: string,
+  mode: 'article' | 'interview',
+  imageCount: number,
+  location: string,
+  newspaper: string
+) {
   const isDev = process.env.NODE_ENV === 'development';
   const apiKey = process.env.GEMINI_API_KEY;
 
@@ -30,11 +37,11 @@ export async function generateNewsArticle(rawContent: string, token: string, mod
     // Wir nehmen die ID exakt so, wie sie auf deinem Playground-Screenshot steht.
     // Das bricht den 404-Kreislauf der veralteten 2.5-Bezeichnungen auf.
     const model = genAI.getGenerativeModel({
-      model: "gemini-3-flash-preview"
+      model: "gemini-1.5-flash"
     });
 
     const prompt = `
-      Du bist ein Sportjournalist für die Regionaliga Südkiff.
+      Du bist ein Journalist für die ${newspaper}.
       Hier ist der Quelltext: "${rawContent}"
 
       Regeln:
@@ -44,8 +51,9 @@ export async function generateNewsArticle(rawContent: string, token: string, mod
          Nutze für das 1. Bild: ![Bild](IMAGE_1), für das 2. Bild: ![Bild](IMAGE_2), usw. bis ![Bild](IMAGE_${imageCount}).
          Platziere diese Marker an den passenden Stellen im Text.
       4. KEINE HAUPTÜBERSCHRIFT: Schreibe BITTE KEINE Hauptüberschrift (kein # Zeichen) ganz oben in den Text, da die App eine eigene Headline verwendet.
-      5. Zwischenüberschriften: Nutze ## für Zwischenüberschriften an logischen Stellen.
-      6. Modus ${mode === 'interview'}:
+      5. Datum (17. Mai 2024) und Ort (${location}) ganz oben.
+      6. Zwischenüberschriften: Nutze ## für Zwischenüberschriften an logischen Stellen.
+      7. Modus ${mode === 'interview'}:
          - Formatiere als exklusives Interview mit **Sprecher:** (fett).
          - WICHTIG: Füge nach JEDER Sprecher-Antwort einen doppelten Zeilenumbruch ein.
     `;

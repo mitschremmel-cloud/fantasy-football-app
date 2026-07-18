@@ -3,6 +3,7 @@ import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import type { Metadata } from 'next';
 import { CommentSection } from '../../components/CommentSection';
+import { ShareButton } from '../../components/ShareButton';
 
 type Article = {
   id: string;
@@ -95,20 +96,6 @@ export default async function ArtikelDetail({ params }: { params: Promise<{ id: 
         {article.title}
       </h1>
 
-      {/* Teilen-Button */}
-      <div className="flex justify-center mb-8">
-        <button
-          onClick={() => {
-            const freshUrl = `${window.location.origin}${window.location.pathname}?t=${Date.now()}`;
-            navigator.clipboard.writeText(freshUrl);
-            alert('Link wurde in die Zwischenablage kopiert! WhatsApp wird das Vorschaubild jetzt neu laden.');
-          }}
-          className="bg-slate-700 hover:bg-indigo-600 text-white px-6 py-2 rounded-full text-sm transition-all shadow-lg border border-slate-600"
-        >
-          🔗 Link zum Teilen kopieren
-        </button>
-      </div>
-
       <div className="prose prose-invert max-w-none">
         <ReactMarkdown
           components={{
@@ -120,9 +107,14 @@ export default async function ArtikelDetail({ params }: { params: Promise<{ id: 
         </ReactMarkdown>
       </div>
 
-      {/* Kommentar-Sektion */}
+      {/* Teilen-Button jetzt hier: Unter dem Artikelinhalt */}
+      <div className="flex justify-center my-12">
+        <ShareButton />
+      </div>
+
+      {/* Kommentar-Sektion mit Überschrift */}
       <div className="mt-12 pt-8 border-t border-slate-700">
-         <h3 className="text-xl font-bold mb-6">Diskussion</h3>
+         <h3 className="text-2xl font-bold mb-6">Diskussion</h3>
         {comments.length === 0 ? (
            <p className="text-gray-500 text-sm italic">Noch keine Kommentare.</p>
         ) : (
