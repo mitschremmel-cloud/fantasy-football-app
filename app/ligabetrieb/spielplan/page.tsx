@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
 import { GAME_STRUCTURE, PLAYOFF_OPTIONS, RIVALRIES, getMatchType } from '../../data/spielplan';
 
 // Wir definieren den Typ jetzt einfach hier im Frontend, 
@@ -19,15 +18,10 @@ export interface SpielerDaten {
 // Typ für die dynamischen Matchups
 type WeekMatchups = { team1: string; team2: string }[];
 
-export default function LigaDetail() {
-  const params = useParams();
-  const id = params.id as string;
-
+export default function SpielplanPage() {
   const [divisions, setDivisions] = useState<{ 1: string[], 2: string[] }>({ 1: [], 2: [] });
   const [loading, setLoading] = useState(true);
-  const [aktiveWoche, setAktiveWoche] = useState<number>(1); // Standardmäßig Woche 1 offen
-  
-  // State für den sauberen API-Spielplan
+  const [aktiveWoche, setAktiveWoche] = useState<number>(1);
   const [apiSchedule, setApiSchedule] = useState<Record<number, WeekMatchups>>({});
 
   const getRivalryBorder = (team: string) => {
@@ -76,17 +70,8 @@ export default function LigaDetail() {
       }
     }
     
-    if (id === 'spielplan') {
     ladeDaten();
-    } else {
-      setLoading(false);
-    }
-  }, [id]);
-
-  if (id !== 'spielplan') {
-    return <main className="min-h-screen bg-slate-900 text-slate-100 p-8 max-w-4xl mx-auto"><h1 className="text-2xl font-bold text-white mb-6">Liga-Bereich nicht gefunden.</h1></main>;
-  }
-
+  }, []);
   return (
     <main className="min-h-screen bg-slate-900 text-slate-100 p-8 max-w-4xl mx-auto">
       <h1 className="text-4xl font-extrabold mb-10 text-white border-b border-slate-700 pb-4">Spielplan</h1>
@@ -161,7 +146,7 @@ export default function LigaDetail() {
                   
                   {istAktiv && (
                     <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-2 bg-slate-800">
-                      {matchups.map((m, i) => {
+                      {matchups.map((m: any, i: number) => {
                         const matchType = getMatchType(m.team1, m.team2);
                         
                         return (

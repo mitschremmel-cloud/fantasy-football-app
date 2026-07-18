@@ -1,29 +1,15 @@
-// app/regelbacklog/page.tsx
 import Link from 'next/link';
-
-const regelVorschlaege = [
-  { 
-    id: 'quarterback', 
-    title: 'QB Scoring Simulation', 
-    description: 'Vergleich Standard vs. benutzerdefiniertes Scoring für Quarterbacks.' 
-  },
-  { 
-    id: 'kicker',
-    title: 'Kicker Skill & Penalty Anpassung', 
-    description: 'Visualisierung der Auswirkungen auf 0-19 Yard Misses.' 
-  },
-];
+import { REGELBACKLOG } from '@/app/data/regel-backlog';
 
 export default function RegelBacklogPage() {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">Regel-Backlog</h1>
+    <div className="p-8 max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold mb-8 text-white">Regel-Backlog</h1>
       <div className="grid gap-4">
-        {regelVorschlaege.map((regel) => (
-          <Link href={`/regelbacklog/${regel.id}`} key={regel.id}>
-            <div className="p-4 border rounded hover:bg-slate-800 transition-colors">
-              <h2 className="text-xl font-semibold">{regel.title}</h2>
-              <p className="text-slate-400">{regel.description}</p>
+        {REGELBACKLOG.map((regel) => (
+          <Link href={`/ligabetrieb/regelbacklog/${regel.id}`} key={regel.id}>
+            <div className="p-6 bg-slate-800 border border-slate-700 rounded-xl hover:bg-slate-700 hover:border-indigo-500 transition-all shadow-md hover:shadow-indigo-500/20">
+              <h2 className="text-xl font-bold text-white mb-2">{regel.title}</h2>
             </div>
           </Link>
         ))}
@@ -31,3 +17,4 @@ export default function RegelBacklogPage() {
     </div>
   );
 }
+

@@ -18,6 +18,10 @@ export default function LigabetriebHub() {
           <History className="w-8 h-8 text-indigo-400" />
           <span className="text-xl font-semibold text-white">Draft-Historie</span>
         </Link>
+        <Link href="/ligabetrieb/ligaregeln" className="bg-slate-700 p-6 rounded-xl hover:bg-slate-600 flex items-center gap-4 border-2 border-slate-600">
+          <BookOpen className="w-8 h-8 text-sky-400" />
+          <span className="text-xl font-semibold text-white">Ligaregeln</span>
+        </Link>
       </div>
     </main>
   );
