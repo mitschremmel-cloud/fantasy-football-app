@@ -18,11 +18,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const rawArticles = await kv.lrange<any>('articles', 0, -1);
   const article = rawArticles.map(a => typeof a === 'string' ? JSON.parse(a) : a).find((a: Article) => a.id === id);
 
-  const url = `https://fantasy-football-app-sigma.vercel.app/neuigkeiten/${id}`;
+  // Der WSrv-Proxy: Er lädt dein Bild, skaliert es auf 1200x630 und gibt es als optimiertes JPG/PNG aus
+  // Das umgeht das 2,3 MB Problem und das 206 Partial Content Problem komplett
+  const originalUrl = article?.imageUrls?.[0];
+  const ogImageUrl = originalUrl
+    ? `https://wsrv.nl/?url=${encodeURIComponent(originalUrl)}&w=1200&h=630&fit=cover&format=png`
+    : 'https://fantasy-football-app-sigma.vercel.app/og-image.png';
 
-  // WhatsApp/OpenGraph mag am liebsten 1200x630 (1.91:1)
-  // Wir geben das Bild an, aber lassen den Browser entscheiden,
-  // wie es skaliert wird. Das Bild im Artikel bleibt unberührt!
+  const url = `https://fantasy-football-app-sigma.vercel.app/neuigkeiten/${id}`;
   return {
     title: article?.title || "Artikel",
     description: article?.content.substring(0, 100) + "...", // Beschreibung für og:description
@@ -31,19 +34,18 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       description: article?.content.substring(0, 100) + "...",
       url: url,
       siteName: "Regionaliga Südkiff Hub",
-      images: article?.imageUrls?.[0] ? [{
-        url: article.imageUrls[0],
+      images: [{
+        url: ogImageUrl,
         width: 1200,
-        height: 630, // Wir geben WhatsApp die Dimensionen vor!
-        alt: article.title
-      }] : [],
+        height: 630
+      }],
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
       title: article?.title || "Artikel",
       description: article?.content.substring(0, 100) + "...",
-      images: article?.imageUrls?.[0] ? [article.imageUrls[0]] : [],
+      images: [ogImageUrl],
     },
   };
 }
