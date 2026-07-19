@@ -74,26 +74,31 @@ export default function SpielplanPage() {
   }, []);
   return (
     <main className="min-h-screen bg-slate-900 text-slate-100 p-8 max-w-4xl mx-auto">
+      <div className="mb-6">
+        <a href="/ligabetrieb" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+          ← Zurück zum Ligabetrieb
+        </a>
+      </div>
       <h1 className="text-4xl font-extrabold mb-10 text-white border-b border-slate-700 pb-4">Spielplan</h1>
 
       <section className="mb-10">
         <h2 className="text-2xl font-bold mb-6">Divisions-Einteilung</h2>
         {loading ? <p className="text-slate-400">Lade Daten...</p> : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 shadow-lg">
               <h3 className="font-bold text-blue-400 mb-4 text-lg border-b border-slate-700 pb-2">Highdelberg</h3>
               <ul className="space-y-2 text-slate-300">
                 {divisions[1].map(n => <li key={n} className={`bg-slate-700/20 py-1 rounded-r ${getRivalryBorder(n)}`}>• {n}</li>)}
               </ul>
-            </div>
+      </div>
             <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 shadow-lg">
               <h3 className="font-bold text-yellow-400 mb-2 text-lg border-b border-slate-700 pb-2">Kiffruhe</h3>
               <ul className="space-y-2 text-slate-300">
                 {divisions[2].map(n => <li key={n} className={`bg-slate-700/20 py-1 rounded-r ${getRivalryBorder(n)}`}>• {n}</li>)}
               </ul>
-            </div>
-          </div>
-        )}
+                          </div>
+                    </div>
+                  )}
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -123,7 +128,7 @@ export default function SpielplanPage() {
 
       <section className="bg-slate-800 p-6 rounded-2xl border border-slate-700 mt-6">
         <h2 className="text-xl font-bold mb-4 text-white">Wöchentlicher Spielplan</h2>
-        
+
         {loading ? (
           <p className="text-slate-400">Lade Matchups...</p>
         ) : Object.keys(apiSchedule).length === 0 ? (
@@ -133,30 +138,30 @@ export default function SpielplanPage() {
             {Object.entries(apiSchedule).map(([woche, matchups]) => {
               const wocheNum = parseInt(woche);
               const istAktiv = wocheNum === aktiveWoche;
-              
+
               return (
                 <div key={woche} className="border border-slate-700 rounded-xl overflow-hidden">
-                  <button 
+                  <button
                     onClick={() => setAktiveWoche(istAktiv ? 0 : wocheNum)}
                     className="w-full p-4 flex justify-between items-center bg-slate-700/30 hover:bg-slate-700/50 transition"
                   >
                     <span className="font-bold text-white">Woche {woche}</span>
                     <span className="text-xs text-slate-400">{istAktiv ? "Einklappen" : "Ausklappen"}</span>
                   </button>
-                  
+
                   {istAktiv && (
                     <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-2 bg-slate-800">
                       {matchups.map((m: any, i: number) => {
                         const matchType = getMatchType(m.team1, m.team2);
-                        
+
                         return (
                           <div key={i} className={`px-3 py-2 rounded text-sm border-l-4 ${
-                            matchType === 'rivalry' ? 'bg-red-900/30 border-red-500' : 
+                            matchType === 'rivalry' ? 'bg-red-900/30 border-red-500' :
                             matchType === 'division' ? 'bg-green-900/30 border-green-500' : 'bg-yellow-900/30 border-yellow-500'
                           }`}>
                             {m.team1} vs {m.team2}
                           </div>
-                        );
+  );
                       })}
                     </div>
                   )}

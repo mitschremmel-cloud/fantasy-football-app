@@ -1,10 +1,15 @@
 import Link from 'next/link';
 import { Scale, Sparkles } from 'lucide-react';
 
-export default function RechnerPage() {
+export default function RechnerHubPage() {
   return (
-    <main className="p-6 md:p-12">
-      <h1 className="text-3xl font-bold text-white mb-8">Rechner Hub</h1>
+    <main className="min-h-screen bg-slate-900 text-slate-100 p-8">
+      <div className="mb-6">
+        <a href="/" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+          ← Zurück zum Dashboard
+        </a>
+      </div>
+      <h1 className="text-3xl font-bold mb-8">Rechner Hub</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Link href="/rechner/keeper" className="bg-slate-700 p-6 rounded-xl hover:bg-slate-600 flex items-center gap-4 border-2 border-slate-600">
           <Sparkles className="w-8 h-8 text-purple-400" />

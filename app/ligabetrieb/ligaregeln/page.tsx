@@ -13,6 +13,11 @@ export default function LigaRegelnPage() {
 
   return (
     <div className="p-8 max-w-3xl mx-auto">
+      <div className="mb-6">
+        <a href="/ligabetrieb" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+          ← Zurück zum Ligabetrieb
+        </a>
+      </div>
       <h1 className="text-3xl font-bold mb-4 text-white">Ligaregeln</h1>
       <p className="text-slate-300 mb-8 leading-relaxed">
         Die Ligarregeln sind beschlossene Regeln ergänzend zu dem Standard Sleeper System. Um eine Regel einzuführen braucht es eine Mehrheit der Liga. Bei Gleichstand ist eine Regeländerung abgelehnt. Nach Ablehnung wird eine Regel nach 3 Jahren wieder zur Abstimmung zugelassen.

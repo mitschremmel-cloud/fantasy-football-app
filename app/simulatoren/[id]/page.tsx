@@ -11,6 +11,11 @@ export default function SimulatorDetail() {
 
   return (
     <main className="p-6">
+      <div className="mb-6">
+        <a href="/simulatoren" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+          ← Zurück zu den Simulatoren
+        </a>
+      </div>
       {id === 'kicker-scoring' && (
         <>
           <h1 className="text-2xl font-bold text-white mb-6">Kicker Scoring Simulator</h1>

@@ -8,13 +8,16 @@ import ManagerKader from '../../components/ManagerKader';
 // Da ich die Datei verloren habe, können wir sie später wiederherstellen.
 // Hier ist das Grundgerüst:
 
-export default function RechnerDetail() {
-  const params = useParams();
-  const id = params.id as string;
-
+export default function RechnerDetail({ params }: { params: { id: string } }) {
+  const { id } = useParams<{ id: string }>();
   if (id === 'keeper') {
     return (
-      <main className="p-6">
+      <main className="min-h-screen bg-slate-900 text-slate-100 p-8">
+        <div className="mb-6">
+          <a href="/rechner" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+            ← Zurück zum Rechner Hub
+          </a>
+        </div>
         <h1 className="text-2xl font-bold text-white mb-6">Keeper Calculator</h1>
         <KeeperCalculator />
         <div className="mt-8">
@@ -26,7 +29,12 @@ export default function RechnerDetail() {
 
   if (id === 'trade') {
     return (
-      <main className="p-6">
+      <main className="min-h-screen bg-slate-900 text-slate-100 p-8">
+        <div className="mb-6">
+          <a href="/rechner" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+            ← Zurück zum Rechner Hub
+          </a>
+        </div>
         <h1 className="text-2xl font-bold text-white mb-6">Trade Rechner</h1>
         <TradeAnalyzer />
         <div className="mt-8">
@@ -36,6 +44,15 @@ export default function RechnerDetail() {
     );
   }
 
-  return <div className="p-6 text-white">Rechner nicht gefunden.</div>;
+  return (
+    <main className="min-h-screen bg-slate-900 text-slate-100 p-8">
+      <div className="mb-6">
+        <a href="/rechner" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+          ← Zurück zum Rechner Hub
+        </a>
+      </div>
+      <div className="p-6 text-white">Rechner nicht gefunden.</div>
+    </main>
+  );
 }
 

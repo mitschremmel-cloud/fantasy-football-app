@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import { kv } from '@vercel/kv';
 
-export const revalidate = 0; // <--- HIER EINFÜGEN
+export const revalidate = 0;
 
-// Wir definieren einen Typ für die Artikel
 type Article = {
   id: string;
   title: string;
@@ -13,32 +12,33 @@ type Article = {
   createdAt: number;
 };
 
-export default async function NeuigkeitenFeed() {
-  // Artikel aus der Vercel KV Datenbank abrufen
+export default async function NeuigkeitenPage() {
   const rawArticles = await kv.lrange<any>('articles', 0, -1);
 
-  console.log("RAW ARTICLES FROM KV:", rawArticles); // DEBUG-LOG
+  console.log("RAW ARTICLES FROM KV:", rawArticles);
 
-  // Sicherer Parse: Überspringe kaputte Einträge statt die ganze App zu crashen
   const articles: Article[] = rawArticles.map((a) => {
-    // Wenn a bereits ein Objekt ist, gib es direkt zurück
     if (typeof a === 'object' && a !== null) {
       return a as Article;
     }
-    // Wenn es ein String ist (altes Format), parsen wir es
     try {
         return JSON.parse(a);
       } catch (e) {
       console.error("Datenformat-Fehler:", a);
       return null;
       }
-  }).filter((a): a is Article => a !== null); // Entfernt alle null-Werte
+  }).filter((a): a is Article => a !== null);
 
-  // HIER DIE SORTIERUNG HINZUFÜGEN:
   const sortedArticles = articles.sort((a, b) => b.createdAt - a.createdAt);
 
   return (
-    <main className="p-8 text-white max-w-4xl mx-auto">
+    <main className="min-h-screen bg-slate-900 text-slate-100 p-8">
+      <div className="mb-6">
+        <a href="/" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+          ← Zurück zum Dashboard
+        </a>
+      </div>
+      
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">News aus der Liga</h1>
         <Link
@@ -54,7 +54,6 @@ export default async function NeuigkeitenFeed() {
           <p className="text-gray-400">Noch keine Artikel vorhanden.</p>
         ) : (
           sortedArticles.map((article) => {
-            // Zusammenfassung: Erste 3 Sätze aus dem Content ziehen
             const summary = article.content.split('.').slice(0, 3).join('.') + '.';
 
             return (
@@ -75,10 +74,5 @@ export default async function NeuigkeitenFeed() {
       </div>
     </main>
   );
-}
-
-module.exports = {
-  // ...
-  plugins: [require('@tailwindcss/typography')],
 }
 

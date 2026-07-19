@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default async function ArtikelDetail({ params }: { params: Promise<{ id: string }> }) {
+export default async function NewsDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const rawArticles = await kv.lrange<any>('articles', 0, -1);
   const articles: Article[] = rawArticles.map((a) => {
@@ -79,9 +79,13 @@ export default async function ArtikelDetail({ params }: { params: Promise<{ id: 
   const rawComments = await kv.lrange<any>(`comments:${id}`, 0, -1);
   const comments = rawComments.map(c => typeof c === 'string' ? JSON.parse(c) : c);
   return (
-    <main className="p-8 text-white max-w-3xl mx-auto zeitungs-artikel">
-      <Link href={`/neuigkeiten?t=${Date.now()}`} className="text-blue-400 hover:underline mb-8 block">← Zurück zur Übersicht</Link>
-      
+    <main className="min-h-screen bg-slate-900 text-slate-100 p-8">
+      <div className="mb-6">
+        <a href="/neuigkeiten" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+          ← Zurück zu den Neuigkeiten
+        </a>
+      </div>
+
       {/* Manuelle Platzierung von Datum und Ort */}
       <div className="text-right text-sm text-gray-400 mb-2 italic">
         {new Date(article.createdAt).toLocaleDateString('de-DE', {

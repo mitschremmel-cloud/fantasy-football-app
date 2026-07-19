@@ -73,6 +73,11 @@ export default function HistoriePage() {
 
   return (
     <main className="min-h-screen bg-slate-900 text-slate-100 p-6 md:p-12">
+      <div className="mb-6 max-w-4xl mx-auto">
+        <a href="/ligabetrieb" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+          ← Zurück zum Ligabetrieb
+        </a>
+      </div>
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 uppercase">

@@ -4,6 +4,11 @@ import { REGELBACKLOG } from '@/app/data/regel-backlog';
 export default function RegelBacklogPage() {
   return (
     <div className="p-8 max-w-2xl mx-auto">
+      <div className="mb-6">
+        <a href="/ligabetrieb" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
+          ← Zurück zum Ligabetrieb
+        </a>
+      </div>
       <h1 className="text-3xl font-bold mb-8 text-white">Regel-Backlog</h1>
       <div className="grid gap-4">
         {REGELBACKLOG.map((regel) => (
