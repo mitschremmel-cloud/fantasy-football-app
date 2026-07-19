@@ -14,7 +14,7 @@ export const calculateDraftPickValue = (
 
   // Wenn das Pick-Jahr 2027 ist (t=0), dann kein Abzug.
   // 2028 (t=1) hat 30% Abzug, etc.
-  const t = Math.max(0, pickYear - (currentYear + 1));
+  const t = Math.max(0, pickYear - (currentYear));
 
   // Berechnung des Durchschnittswerts für die 10 Picks der Runde (Basiswert)
   let sum = 0;
