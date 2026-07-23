@@ -1,6 +1,6 @@
 'use server';
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from 'openai';
 
 export async function generateNewsArticle(
   rawContent: string,
@@ -11,10 +11,10 @@ export async function generateNewsArticle(
   newspaper: string
 ) {
   const isDev = process.env.NODE_ENV === 'development';
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
 
   if (!apiKey) {
-    throw new Error("GEMINI_API_KEY ist in den Umgebungsvariablen nicht definiert.");
+    throw new Error("GROQ_API_KEY ist in den Umgebungsvariablen nicht definiert.");
   }
 
   // --- Turnstile Validierung ---
@@ -32,33 +32,37 @@ export async function generateNewsArticle(
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    
-    // Ändere hier das Modell auf die Version, auf die du Zugriff hast
-    const model = genAI.getGenerativeModel({
-      model: "gemini-3-flash-preview"
+    const openai = new OpenAI({
+      apiKey: apiKey,
+      baseURL: "https://api.groq.com/openai/v1"
     });
 
-    const prompt = `
+    const systemPrompt = `
       Du bist ein Journalist für die ${newspaper}.
-      Hier ist der Quelltext: "${rawContent}"
-
       Regeln:
       1. Ändere NICHT ein einziges Wort am Inhalt. Übernimm den Text exakt so wie er ist.
-      2. Aufgabe: Formatierung als ${mode === 'article' ? 'Zeitungsartikel' : 'Interview-Transkript'}.
-      3. WICHTIG: Füge GENAU ${imageCount} Bild-Platzhalter ein.
+      2. Der Artikel ist im Blocksatz zu formatieren. Außerdem nimm eine zeitungswürdige Schriftart.
+      3. Aufgabe: Formatierung als ${mode === 'article' ? 'Zeitungsartikel' : 'Interview-Transkript'}.
+      4. WICHTIG: Füge GENAU ${imageCount} Bild-Platzhalter ein.
          Nutze für das 1. Bild: ![Bild](IMAGE_1), für das 2. Bild: ![Bild](IMAGE_2), usw. bis ![Bild](IMAGE_${imageCount}).
          Platziere diese Marker an den passenden Stellen im Text.
-      4. KEINE HAUPTÜBERSCHRIFT: Schreibe BITTE KEINE Hauptüberschrift (kein # Zeichen) ganz oben in den Text, da die App eine eigene Headline verwendet.
-      5. Datum (${new Date().toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' })}), Ort (${location}) und Zeitung (${newspaper}) ganz oben.
-      6. Zwischenüberschriften: Nutze ## für Zwischenüberschriften an logischen Stellen.
-      7. Modus ${mode === 'interview'}:
+      5. KEINE HAUPTÜBERSCHRIFT: Schreibe BITTE KEINE Hauptüberschrift (kein # Zeichen) ganz oben in den Text, da die App eine eigene Headline verwendet.
+      6. Datum (${new Date().toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' })}), Ort (${location}) und Zeitung (${newspaper}) ganz oben.
+      7. Zwischenüberschriften: Nutze ## für Zwischenüberschriften an logischen Stellen.
+      8. Modus ${mode === 'interview'}:
          - Formatiere als exklusives Interview mit **Sprecher:** (fett).
          - WICHTIG: Füge nach JEDER Sprecher-Antwort einen doppelten Zeilenumbruch ein.
     `;
-    const result = await model.generateContent(prompt);
+
+    const response = await openai.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: `Hier ist der Quelltext: "${rawContent}"` }
+      ],
+    });
     
-    return result.response.text();
+    return response.choices[0].message.content || "";
 
   } catch (error: any) {
     console.error('--- VOLLER FEHLER ---');

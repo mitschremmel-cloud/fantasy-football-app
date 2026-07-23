@@ -100,11 +100,11 @@ export default async function NewsDetail({ params }: { params: Promise<{ id: str
         {article.title}
       </h1>
 
-      <div className="prose prose-invert max-w-none">
+      <div className="prose prose-invert max-w-none zeitungs-artikel">
         <ReactMarkdown
           components={{
             img: ({node, ...props}) => <img {...props} className="my-6 border border-gray-600 rounded shadow-lg" />,
-            p: ({node, ...props}) => <p className="mb-6 leading-relaxed text-justify" {...props} />
+            p: ({node, ...props}) => <p className="mb-6 leading-relaxed" {...props} />
           }}
         >
             {contentWithImages}
