@@ -95,8 +95,8 @@ export default async function NewsDetail({ params }: { params: Promise<{ id: str
         })} 
       </div>
 
-      {/* Die Überschrift besonders groß */}
-      <h1 className="text-5xl font-extrabold mb-8 text-center uppercase tracking-tight">
+      {/* Die Überschrift angepasst */}
+      <h1 className="text-3xl font-extrabold mb-8 text-center uppercase tracking-tight">
         {article.title}
       </h1>
 
@@ -104,7 +104,7 @@ export default async function NewsDetail({ params }: { params: Promise<{ id: str
         <ReactMarkdown
           components={{
             img: ({node, ...props}) => <img {...props} className="my-6 border border-gray-600 rounded shadow-lg" />,
-            p: ({node, ...props}) => <p className="mb-6 leading-relaxed" {...props} />
+            p: ({node, ...props}) => <p className="mb-6 leading-relaxed text-justify" {...props} />
           }}
         >
             {contentWithImages}
