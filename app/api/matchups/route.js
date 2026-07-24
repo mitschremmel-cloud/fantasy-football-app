@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { holeSleeperMatchups } from '@/app/utils/sleeperRoute';
+import { holeSleeperMatchups } from '@/app/utils/sleeperAPI/sleeperService';
 
 export async function GET() {
   const data = await holeSleeperMatchups();

@@ -1,4 +1,4 @@
-const LEAGUE_ID = "1251196293691211776";
+const LEAGUE_ID = "1379487727849832448";
 
 const DRAFT_IDS: Record<string, string> = {
   "2022": "862027516456595457",
@@ -143,9 +143,6 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
   }
 }
 
-// ----------------------------------------------------------------------
-// NEUE FUNKTION: Sauber GETRENNT von der Funktion oben!
-// ----------------------------------------------------------------------
 export async function holeSleeperMatchups() {
   try {
     const [resUsers, resRosters] = await Promise.all([

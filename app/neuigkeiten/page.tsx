@@ -33,12 +33,6 @@ export default async function NeuigkeitenPage() {
 
   return (
     <main className="min-h-screen bg-slate-900 text-slate-100 p-8">
-      <div className="mb-6">
-        <a href="/" className="text-xs uppercase tracking-widest text-slate-400 hover:text-white transition underline underline-offset-4">
-          ← Zurück zum Dashboard
-        </a>
-      </div>
-      
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">News aus der Liga</h1>
         <Link

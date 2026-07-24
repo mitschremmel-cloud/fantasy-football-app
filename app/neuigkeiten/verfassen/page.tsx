@@ -4,10 +4,18 @@ import { useState } from 'react';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { generateNewsArticle } from '../../actions/generateNews';
 import { saveArticle } from '../../actions/saveArticle';
-import { UploadButton } from "../../utils/uploadthing-components";
+import { UploadButton } from "../../components/uploadthing-components";
 import type { OurFileRouter } from "../../utils/uploadthing";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Scatter } from 'recharts';
+
+export function KickerAnalysisCharts({ data, historicalData, onLoadHistorical, loadingHistorical }: any) {
+  // Wenn keine Daten da sind, rendert die Komponente nichts.
+  // Das verhindert den Absturz auf Seiten, wo sie nicht gebraucht wird.
+  if (!data) return null;
+  return null;
+}
 
 export default function ArtikelVerfassenPage() {
   const router = useRouter();
@@ -149,6 +157,13 @@ export default function ArtikelVerfassenPage() {
           {isGenerating ? 'KI formatiert & speichert...' : 'Artikel veröffentlichen'}
         </button>
       </form>
+
+      {/* In der render()-Methode unter den bestehenden Scatters: */}
+      <Scatter
+        name="Historisch (seit 2022)"
+        data={[]}
+        fill="#f59e0b" // Orange für historische Daten
+      />
     </main>
   );
 }

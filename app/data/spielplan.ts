@@ -21,7 +21,7 @@ export const GAME_STRUCTURE = [
 
 export const PLAYOFF_OPTIONS = [
   "Die 2 ersten jeder Division und die 2 mit den höchsten PF",
-  "Die 2 ersten jeder Division und die 2 mit den besten Record",
+  "Seeds werden vergeben nach 1. Rang 2. Record 3. Points For",
 ];
 
 // Map nutzt jetzt exakt die Strings, die auch gerendert werden

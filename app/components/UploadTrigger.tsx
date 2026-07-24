@@ -1,6 +1,6 @@
 'use client';
 
-import { UploadButton } from "../utils/uploadthing-components";
+import { UploadButton } from "../components/uploadthing-components";
 import { useState } from "react";
 
 interface UploadTriggerProps {

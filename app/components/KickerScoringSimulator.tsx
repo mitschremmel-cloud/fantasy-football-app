@@ -16,6 +16,8 @@ export default function KickerScoringSimulator() {
   });
   const [results, setResults] = useState<any[]>([]);
   const [stats, setStats] = useState<KickerPerformanceMetrics[]>([]); 
+  const [historicalStats, setHistoricalStats] = useState<KickerPerformanceMetrics[]>([]);
+  const [loadingHistorical, setLoadingHistorical] = useState(false);
   const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' }>({ key: 'totalPoints', direction: 'desc' });
 
           const labelMapping: Record<string, string> = {
@@ -52,8 +54,34 @@ export default function KickerScoringSimulator() {
     })));
   };
 
-  useEffect(() => { fetchData(); }, [year, weights]);
+  const loadHistoricalData = async () => {
+    setLoadingHistorical(true);
+    const sanitizedWeights: any = {};
+    for (const key in weights) {
+      const val = weights[key];
+      sanitizedWeights[key] = (val === '' || val === null || val === undefined || isNaN(Number(val))) ? 0 : Number(val);
+    }
 
+    // Wir senden die aktuellen Gewichte an die API, damit für die historischen Jahre
+    // die GLEICHE Simulation wie beim aktuellen Jahr durchgeführt wird
+        const res = await fetch('/api/nflverse/kicker', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ year: [2022, 2023, 2024, 2025], weights: sanitizedWeights }),
+        });
+        const data = await res.json();
+
+    setHistoricalStats(data.map((p: any) => ({
+      name: `${p.name} (${p.season})`, // Name inkl. Saison für Eindeutigkeit
+          avgStandard: p.standardPointsPerGame,
+          avgSimulated: p.pointsPerGame,
+          cvStandard: p.cvStandard,
+          cvSimulated: p.cvSimulated
+        })));
+    setLoadingHistorical(false);
+  };
+
+  useEffect(() => { fetchData(); }, [year, weights]);
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
   if (!mounted) return null;
@@ -134,7 +162,6 @@ export default function KickerScoringSimulator() {
       </table>
       </div>
 
-      {/* 1. Ursprünglicher LineChart kommt jetzt ZUERST */}
       <div className="h-80 w-full mt-10 bg-slate-900 p-4 rounded">
         <h3 className="text-white mb-4">Punkte pro Spiel Vergleich (Top 32)</h3>
         <ResponsiveContainer width="100%" height="100%">
@@ -158,7 +185,12 @@ export default function KickerScoringSimulator() {
       {stats.length > 0 && (
         <div className="mt-10">
           <h3 className="text-xl font-bold mb-4">Statistische Analyse (Zufälligkeit & Trends)</h3>
-          <KickerAnalysisCharts data={stats} />
+            <KickerAnalysisCharts
+                data={stats}
+                historicalData={historicalStats}
+                onLoadHistorical={loadHistoricalData}
+                loadingHistorical={loadingHistorical}
+            />
         </div>
       )}
     </div>

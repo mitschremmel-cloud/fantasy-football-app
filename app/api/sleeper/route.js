@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { holeSleeperLigaKader } from '../../utils/sleeperRoute';
+import { holeSleeperLigaKader } from '../../utils/sleeperAPI/sleeperService';
 
 export async function GET() {
   const data = await holeSleeperLigaKader();
