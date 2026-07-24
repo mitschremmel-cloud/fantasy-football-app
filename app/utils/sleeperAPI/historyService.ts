@@ -43,8 +43,7 @@ export async function holeLigaHistorie(): Promise<Champion[] | { error: string }
         const users = await usersRes.json();
         const rosters = await rostersRes.json();
 
-        // Debugging: Liste alle Spiele
-        console.log(`Debug ${season}: Alle Spiele`, winners);
+
 
         // Wir haben gesehen:
         // 2024: m=1, r=1, w=8
@@ -170,7 +169,7 @@ export async function holeKaderFuerJahr(jahr: string): Promise<any[] | { error: 
               return {
                 name: p ? `${p.first_name} ${p.last_name}` : `Unbekannter (${pId})`,
               round: pick ? pick.round : 99,
-                status: pick ? `Draft Runde ${pick.round}` : "Waiver",
+                status: pick ? `Runde ${pick.round}` : "Waiver",
               points: totalPointsMap[pId] ? totalPointsMap[pId].toFixed(1) : "0.0"
               };
         });

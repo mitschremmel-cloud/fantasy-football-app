@@ -27,6 +27,10 @@ export default function LigabetriebHub() {
           <Trophy className="w-8 h-8 text-yellow-400" />
           <span className="text-xl font-semibold text-white">Halle der Berühmten</span>
         </Link>
+        <Link href="/ligabetrieb/ligastatistiken" className="bg-slate-700 p-6 rounded-xl hover:bg-slate-600 flex items-center gap-4 border-2 border-slate-600">
+          <Trophy className="w-8 h-8 text-emerald-400" />
+          <span className="text-xl font-semibold text-white">Ligastatistiken</span>
+        </Link>
       </div>
     </main>
   );
