@@ -10,6 +10,7 @@ const DRAFT_IDS: Record<string, string> = {
 export interface SpielerDaten {
   name: string;
   manager: string;
+  loginName: string;
   division: number; 
   runde2025: string;
   istWaiver: boolean;
@@ -51,12 +52,13 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
 
     const normalisiereName = (n: string) => n ? n.toLowerCase().replace(/[^a-z0-9]/g, "").trim() : "";
 
-    const alleSpielerFormatiert: Record<string, { name: string, manager: string, division: number, picks: Record<string, any> }> = {};
+    const alleSpielerFormatiert: Record<string, { name: string, manager: string, loginName: string, division: number, picks: Record<string, any> }> = {};
 
     if (Array.isArray(rosters)) {
       rosters.forEach((roster: any) => {
         const managerUser = Array.isArray(users) ? users.find((u: any) => u.user_id === roster.owner_id) : null;
         const managerName = managerUser ? (managerUser.metadata?.team_name || managerUser.display_name) : "Unbekannter Manager";
+        const loginName = managerUser ? managerUser.display_name : "unbekannt";
         const division = roster.settings?.division || 1;
         
         (roster.players || []).forEach((pId: string) => {
@@ -75,6 +77,7 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
           alleSpielerFormatiert[sNorm] = {
             name: vollerName,
             manager: managerName,
+            loginName: loginName,
             division: division,
             picks: { "2022": null, "2023": null, "2024": null, "2025": null }
           };
@@ -95,6 +98,7 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
         alleSpielerFormatiert[sNorm] = {
           name: vollerName,
           manager: "Free Agent / Karriereende",
+          loginName: "freeagent",
           division: 1,
           picks: { "2022": null, "2023": null, "2024": null, "2025": null }
         };
@@ -123,6 +127,7 @@ export async function holeSleeperLigaKader(): Promise<SpielerDaten[] | { error: 
       return {
         name: spieler.name,
         manager: spieler.manager,
+        loginName: spieler.loginName,
         division: spieler.division,
         runde2025: String(r("2025")),
         istWaiver: !picks["2025"],
@@ -188,3 +193,4 @@ export async function holeSleeperMatchups() {
     return { error: "Fehler beim Laden des Spielplans" };
   }
 }
+
