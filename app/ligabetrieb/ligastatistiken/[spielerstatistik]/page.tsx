@@ -1,9 +1,14 @@
-import { holeSpielerStatistik } from '@/app/utils/sleeperAPI/statsService';
-import { notFound } from 'next/navigation';
+import { holeSpielerStatistik, holeH2HStatistik } from '@/app/utils/sleeperAPI/statsService';
+import H2HToggle from './h2h-toggle';
 
 export default async function SpielerDetail({ params }: { params: Promise<{ spielerstatistik: string }> }) {
   const { spielerstatistik: loginName } = await params;
-  const stats = await holeSpielerStatistik(loginName);
+  
+  // Daten parallel laden
+  const [stats, h2h] = await Promise.all([
+    holeSpielerStatistik(loginName),
+    holeH2HStatistik(loginName)
+  ]);
 
   if ("error" in stats || !stats.bestSeason) return <div className="p-6 text-red-500">Daten nicht gefunden.</div>;
 
@@ -23,19 +28,21 @@ export default async function SpielerDetail({ params }: { params: Promise<{ spie
       </div>
 
       <div className="mt-8 bg-slate-800 p-6 rounded-xl border border-slate-700">
-        <h2 className="text-xl font-bold mb-4">Top 3 Lieblingsspieler</h2>
+        <h2 className="text-xl font-bold mb-4">Top 5 Lieblingsspieler</h2>
         <div className="space-y-4">
             {stats.topPlayers.map((p: any, i: number) => (
                 <div key={i} className="flex justify-between items-center border-b border-slate-700 pb-2">
                     <span className="font-semibold">{i + 1}. {p.name}</span>
                     <span className="text-sm text-slate-400">
-                        {p.seasons} Saisons | {p.points} Pkt
+                        {p.games} Spiele | {p.points} Pkt
                     </span>
                 </div>
             ))}
         </div>
       </div>
+
+      {/* Toggle-Komponente für H2H */}
+      <H2HToggle h2h={h2h} />
     </div>
   );
 }
-

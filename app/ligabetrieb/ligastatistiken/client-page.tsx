@@ -41,9 +41,9 @@ export default function LigastatistikenPage({ initialStats }: { initialStats: an
         <table className="w-full text-left text-slate-300">
           <thead className="bg-slate-900 uppercase text-xs font-bold text-slate-400">
             <tr>
-              {["manager", "winsChampionship", "playoffs", "record", "fpts", "fptsAgainst"].map((k) => (
+              {["manager", "winsChampionship", "winsFinals", "record", "fpts", "fptsAgainst"].map((k) => (
                 <th key={k} className="p-4 cursor-pointer hover:text-white" onClick={() => handleSort(k)}>
-                  {k === "manager" ? "Login Name" : k === "winsChampionship" ? "Siege" : k === "playoffs" ? "Playoffs" : k === "record" ? "Record" : k === "fpts" ? "PF" : "PA"}
+                  {k === "manager" ? "Login Name" : k === "winsChampionship" ? "Siege" : k === "winsFinals" ? "Finals" : k === "record" ? "Record" : k === "fpts" ? "PF" : "PA"}
                   {sortConfig?.key === k && (sortConfig.direction === "asc" ? " ▲" : " ▼")}
                 </th>
               ))}
@@ -54,7 +54,7 @@ export default function LigastatistikenPage({ initialStats }: { initialStats: an
               <tr key={i} className="hover:bg-slate-700/50 cursor-pointer" onClick={() => window.location.href = `/ligabetrieb/ligastatistiken/${s.manager}`}>
                 <td className="p-4 font-bold text-white">{s.manager}</td>
                 <td className="p-4 text-center">{s.winsChampionship}</td>
-                <td className="p-4 text-center">{s.playoffs}</td>
+                <td className="p-4 text-center">{s.winsFinals}</td>
                 <td className="p-4 text-center font-mono">{s.record}</td>
                 <td className="p-4 text-center font-mono">{s.fpts}</td>
                 <td className="p-4 text-center font-mono">{s.fptsAgainst}</td>
