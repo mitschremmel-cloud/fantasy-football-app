@@ -4,6 +4,11 @@ import { useParams } from 'next/navigation';
 import { KickerAnalysisCharts } from '../../components/KickerAnalysisCharts';
 import KickerScoringSimulator from '../../components/KickerScoringSimulator';
 import QBScoringSimulator from '../../components/QBScoringSimulator';
+import RBScoringSimulator from '../../components/RBScoringSimulator';
+import WRScoringSimulator from '../../components/WRScoringSimulator';
+import TEScoringSimulator from '../../components/TEScoringSimulator';
+import FlexScoringSimulator from '../../components/FlexScoringSimulator';
+
 
 export default function SimulatorDetail() {
   const params = useParams();
@@ -28,7 +33,32 @@ export default function SimulatorDetail() {
           <QBScoringSimulator />
         </>
       )}
-      {!['kicker-scoring', 'scoring'].includes(id) && (
+      {id === 'rb-scoring' && (
+        <>
+          <h1 className="text-2xl font-bold text-white mb-6">RB Scoring Simulator</h1>
+          <RBScoringSimulator />
+        </>
+      )}
+
+      {id === 'wr-scoring' && (
+        <>
+          <h1 className="text-2xl font-bold text-white mb-6">WR Scoring Simulator</h1>
+          <WRScoringSimulator />
+        </>
+      )}
+      {id === 'te-scoring' && (
+        <>
+          <h1 className="text-2xl font-bold text-white mb-6">TE Scoring Simulator</h1>
+          <TEScoringSimulator />
+        </>
+      )}
+      {id === 'flex-scoring' && (
+        <>
+          <h1 className="text-2xl font-bold text-white mb-6">Flex Scoring Simulator</h1>
+          <FlexScoringSimulator />
+        </>
+      )}
+      {!['kicker-scoring', 'scoring', 'rb-scoring', 'wr-scoring', 'te-scoring', 'flex-scoring'].includes(id) && (
         <div className="text-white">Simulator nicht gefunden.</div>
       )}
     </main>
