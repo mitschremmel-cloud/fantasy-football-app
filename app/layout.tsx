@@ -1,6 +1,7 @@
 // app/layout.tsx
 import './globals.css';
 import { Menu } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Hauptinhalt */}
         <main className="flex-1 overflow-y-auto p-4 md:ml-64 bg-slate-900">
           {children}
+          <Analytics />
         </main>
       </body>
     </html>
