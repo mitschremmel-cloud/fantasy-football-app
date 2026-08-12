@@ -8,6 +8,14 @@ export type Regel = {
 };
 
 export const LIGAREGELN: Regel[] = [
+    {
+    id: 'ir-spot',
+    title: 'IR-Spot',
+    year: '2026',
+    description: 'Suspended Spieler dürfen nicht auf den IR Spot gesetzt werden.',
+    pro: [],
+    contra: []
+  },
   {
     id: 'playoff',
     title: 'Playoffs',

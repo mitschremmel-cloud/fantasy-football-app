@@ -45,7 +45,7 @@ export const REGELBACKLOG: Regel[] = [
   {
     id: 'draft-pick-trading',
     title: 'Draft Pick Trading',
-    description: 'Ermöglicht den Handel von Draft-Picks für zukünftige Saisons. Man könnte diskutieren, ob wie beim Keepen Erst- und/oder Zweitrunden Picks ausgeschlossen sind. Außerdem könnte man die Trade Deadline auf Woche 11 oder 12 vorverlegen um Tanking zu minimieren. Der <a href="/rechner/trade" class="text-indigo-400 hover:underline">Trade-Analyzer</a> kann helfen ein Gefühl für den Value von Draft Picks zu bekommen.',
+    description: 'Ermöglicht den Handel von Draft-Picks für zukünftige Saisons. Man könnte diskutieren, ob wie beim Keepen Erst- und/oder Zweitrunden Picks ausgeschl ossen sind. Außerdem könnte man die Trade Deadline auf Woche 11 oder 12 vorverlegen um Tanking zu minimieren. Der <a href="/rechner/trade" class="text-indigo-400 hover:underline">Trade-Analyzer</a> kann helfen ein Gefühl für den Value von Draft Picks zu bekommen. Diese Regel wurde 2026 abgelehnt.',
     pro: ['Langfristige Planung', 'Mehr Handlungsspielraum', 'Potentiell mehr Trades','Mehr Action'],
     contra: ['Risiko von "Tanking"', 'Kann Wettbewerbsgleichgewicht gefährden','Alle Spieler müssen in der Liga bleiben', 'Macht das Spiel komplizierter','Erstrundenpicks schwanken stark im Value je nachdem wo der Spieler in der nächsten Saison landet.']
   },
@@ -59,7 +59,7 @@ export const REGELBACKLOG: Regel[] = [
   {
     id: 'top-seed-playoff-choice',
     title: 'Top Seed chooses Playoff Opponent',
-    description: 'Der bestplatzierte Spieler darf sich seinen Playoff-Gegner aussuchen.',
+    description: 'Der bestplatzierte Spieler darf sich seinen Playoff-Gegner aussuchen. Diese Regel wurde 2026 abgelehnt',
     pro: ['Belohnt gute Saisonleistung', 'Erhöht Drama'],
     contra: []
   },

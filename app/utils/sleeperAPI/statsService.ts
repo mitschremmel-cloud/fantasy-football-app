@@ -3,9 +3,9 @@ import { cache } from 'react';
 // Historische Daten für Meisterschaften und Finals
 const MANUAL_HISTORY: Record<string, { champ: string, finalists: string[] }> = {
   "2025": { champ: "", finalists: ["Bockwurstmeta", "Mitsch"] },
-  "2024": { champ: "", finalists: ["Bockwurstmeta", "Gewinne"] },
-  "2023": { champ: "", finalists: ["KaisLeisten", "Gewinne"] },
-  "2022": { champ: "", finalists: ["JeanBaptiste", "Gewinne"] },
+  "2024": { champ: "", finalists: ["Bockwurstmeta", "gewinne"] },
+  "2023": { champ: "", finalists: ["KaisLeisten", "gewinne"] },
+  "2022": { champ: "", finalists: ["JeanBaptiste", "gewinne"] },
   "2021": { champ: "", finalists: ["JeanBaptiste", "mackmack"] },
 };
 
